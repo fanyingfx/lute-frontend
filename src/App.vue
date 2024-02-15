@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import Reading from '@/components/reading/Reading.vue'
+import Reading from '@/views/ReadingView.vue'
 </script>
 
 <template>

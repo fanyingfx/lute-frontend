@@ -1,6 +1,6 @@
 export interface TSegment {
     segment_type: string,
-    segment_value: string | TextParagraphSegment,
+    segment_value: string |SentenceSegment,
     segment_raw: string,
     segment_order: number
 }
@@ -26,21 +26,25 @@ export interface WordToken {
     word_pronunciation: string
 }
 
-export interface TokenSentence {
+export interface SentenceSegment {
     segment_value: WordToken[]
     segment_type: string
+    segment_raw: string
+    paragraph_order: number
+    sentence_order: number
 
 }
 
 export interface TextParagraphSegment {
-    segment_value: TokenSentence[],
+    segment_value: SentenceSegment[],
     segment_type: string,
     segment_raw: string
     segment_order: number
 
 }
 
-type ResponseText = {
+export interface ServerResponse {
     data: TSegment[]
 }
+
 

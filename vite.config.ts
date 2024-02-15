@@ -2,6 +2,8 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+
 import AutoImport from "unplugin-auto-import/vite"
 import Components from 'unplugin-vue-components/dist/vite.js'
 import { NaiveUiResolver } from 'unplugin-vue-components/dist/resolvers.js'
@@ -33,6 +35,7 @@ export default defineConfig({
     }},
   plugins: [
     vue(),
+    vueJsx(),
     AutoImport({
       imports: ["vue",
         {

@@ -1,26 +1,26 @@
-<script setup lang="ts">
-import type {TokenSentence} from "@/Interface"
+<!--<script setup lang="ts">-->
+<!--import type {SentenceSegment} from "@/Interface"-->
 
-import Sentence from "@/components/reading/Sentence.vue";
+<!--import SentenceItem from "@/components/reading/SentenceItem.vue";-->
 
-const props = defineProps<{
-  sentences: TokenSentence[],
-  paragraph_order: number
-}>()
+<!--const props = defineProps<{-->
+<!--  sentences: SentenceSegment[],-->
+<!--  paragraph_order: number-->
+<!--}>()-->
 
-</script>
+<!--</script>-->
 
-<template>
-  <n-p :id="'para'+paragraph_order" class="text-wrap border border-b-indigo-600">
+<!--<template>-->
+<!--  <n-p :id="'para'+paragraph_order" class="text-wrap border border-b-indigo-600">-->
 
-    <template v-for="(segment,index)  in sentences">
-      <Sentence :sentence="segment.segment_value" :sentence_order="index+1"
-                :paragraph_order="paragraph_order"></Sentence>
-    </template>
-  </n-p>
+<!--    <template v-for="(segment,index)  in sentences" :key="index">-->
+<!--      <SentenceItem :sentence="segment.segment_value" :sentence_order="index+1"-->
+<!--                :paragraph_order="paragraph_order"></SentenceItem>-->
+<!--    </template>-->
+<!--  </n-p>-->
 
-</template>
+<!--</template>-->
 
-<style scoped>
+<!--<style scoped>-->
 
-</style>
+<!--</style>-->

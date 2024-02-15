@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import type {TSegment} from "@/Interface";
-import TextParagraph from "@/components/reading/TextParagraph.vue";
+import SentenceItem from '@/components/reading/SentenceItem.vue'
 defineProps<{
   segments:TSegment[]
 }>();
@@ -10,14 +10,14 @@ defineProps<{
 
 <template>
   <n-el tag="div" class="border border-b-fuchsia-300">
-  <template v-for="segment in segments" class="text-left">
-    <TextParagraph v-if="segment.segment_type==='textparagraph'" :sentences="segment.segment_value" :paragraph_order="segment.segment_order"></TextParagraph>
-    <n-image v-else-if="segment.segment_type==='image' " :alt="segment.segment_value">{{segment.segment_value}}</n-image>
-    <br v-else-if="segment.segment_type==='softlinebreak'"/>
-    <template v-else-if="segment.segment_type==='hardlinebreak'">
-      <br/><br/>
+  <template v-for="(item,index) in segments" :key="index">
+    <SentenceItem v-if="item.segment_type==='sentence'" :sentence_segment="item" />
+    <n-image v-else-if="item.segment_type==='image' " :alt="item.segment_value">{{item.segment_value}}</n-image>
+    <br v-else-if="item.segment_type==='softlinebreak'"/>
+    <template v-else-if="item.segment_type==='hardlinebreak'">
+      <br style="display: block;content: '';margin-top: 1.5rem;"/>
     </template>
-    <pre v-else-if="segment.segment_type==='block'">{{segment.segment_value}}</pre>
+    <pre v-else-if="item.segment_type==='block'">{{item.segment_value}}</pre>
   </template>
   </n-el>
 
