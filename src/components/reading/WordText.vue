@@ -1,18 +1,17 @@
-<script setup lang="ts" name="WordText">
-import type { WordToken } from '@/Interface'
+<!--<script setup lang="ts" name="WordText">-->
+<!--import type { WordToken } from '@/Interface'-->
 
-let props = defineProps<{
-  word: WordToken,
-  word_id: Number
-}>()
+<!--let props = defineProps<{-->
+<!--  word: WordToken,-->
+<!--  word_id: Number-->
+<!--}>()-->
 
+<!--</script>-->
 
-</script>
+<!--<template>-->
 
-<template>
+<!--</template>-->
 
-</template>
+<!--<style scoped>-->
 
-<style scoped>
-
-</style>
+<!--</style>-->

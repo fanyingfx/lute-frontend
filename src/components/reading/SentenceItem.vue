@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import WordItem from "@/components/reading/WordItem.vue";
-import { type SentenceSegment, type WordToken } from '@/Interface'
+import WordItem from '@/components/reading/WordItem.vue'
+import { type SentenceSegment } from '@/Interface'
 
-const props = defineProps<{
-  sentence_segment:SentenceSegment
+defineProps<{
+  sentence_segment: SentenceSegment
 }>()
 // onMounted(()=>
 // {
@@ -11,15 +11,15 @@ const props = defineProps<{
 </script>
 
 <template>
-  <n-el :id="'para'+sentence_segment.paragraph_order+'_sent'+sentence_segment.sentence_order" tag="span" class="border border-t-blue-400">
-  <template  v-for="(item,index) in sentence_segment.segment_value" :key="index" >
-    <WordItem :word="item" :word_id="index+1" />
-  </template>
+  <n-el
+    tag="div"
+    :id="'para' + sentence_segment.paragraph_order + '_sent' + sentence_segment.sentence_order"
+    class="border border-t-blue-400"
+  >
+    <template v-for="(item, index) in sentence_segment.segment_value" :key="index">
+      <WordItem :word="item" :word_id="index + 1" />
+    </template>
   </n-el>
-
-
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
