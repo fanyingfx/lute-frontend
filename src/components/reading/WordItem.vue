@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import { type WordToken } from '@/Interface'
 import WordText from '@/components/reading/WordText.vue'
 

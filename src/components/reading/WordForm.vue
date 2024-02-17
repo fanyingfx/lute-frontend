@@ -14,19 +14,24 @@ const wordModel = reactive({
   word_status: wordState.value?.word_status,
   word_pronunciation: wordState.value?.word_pronunciation,
   word_tokens: [wordState.value?.word_string],
+  next_is_ws: false,
   word_counts: 1
 })
 
 watch(wordState, () => {
   if (wordState.value !== null) {
-    // Object.assign(wordModel,wordState.value)
     wordModel.word_string = wordState.value.word_string
     wordModel.word_explanation = wordState.value.word_explanation
     wordModel.word_status = wordState.value.word_status
     wordModel.word_pos = wordState.value.word_pos
     wordModel.word_lemma = wordState.value.word_lemma
-    wordModel.word_tokens = [wordState.value.word_string]
-    wordModel.word_counts = 1
+    if (!wordState.value.is_multiple_words) {
+      wordModel.word_tokens = [wordState.value.word_string]
+      wordModel.word_counts = 1
+    } else if (wordState.value.word_tokens !== undefined) {
+      wordModel.word_counts = wordState.value.word_tokens.length
+      wordModel.word_tokens = wordState.value.word_tokens
+    }
   }
 })
 // console.log('wordToken',wordState.value)
@@ -91,6 +96,7 @@ async function onFormSubmit() {
         <n-button>Delete</n-button>
         <n-button @click="onFormSubmit">Save</n-button>
       </div>
+      <n-text>{{ wordModel.word_tokens }}</n-text>
 
       <!--      </n-form-item>-->
     </n-form>

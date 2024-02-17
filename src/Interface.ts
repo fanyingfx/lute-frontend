@@ -4,6 +4,7 @@ export interface Segment {
   segment_raw: string
   paragraph_order: number
 }
+
 export type TSegment = Segment | TextParagraphSegment | SentenceSegment
 
 export interface BasicSegment {
@@ -16,14 +17,15 @@ export interface BasicSegment {
 export interface WordToken {
   word_string: string
   word_lemma: string
-  word_pos: string
+  word_pos?: string
   is_multiple_words: boolean
   is_word: boolean
   is_eos: boolean
   next_is_ws: boolean
   word_status: number
-  word_explanation: string
-  word_pronunciation: string
+  word_explanation?: string
+  word_pronunciation?: string
+  word_tokens?: string[]
 }
 
 export interface SentenceSegment {

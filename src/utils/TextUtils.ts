@@ -62,20 +62,27 @@ export function bookDatapaginate(bookData: TSegment[], wordsPerPage: number): TS
         pageDataHasText = true
       }
       pageSegmentsCount = currentSegmentLength
-    } else {
-      while (pageData.length > 0 && pageData[0].segment_type.includes('linebreak')) {
-        pageData = pageData.splice(1)
-      }
-      // console.log('pagedata-before', pageData)
-      const newPageData = combineSentenceToParagraph(pageData)
-      // console.log('pagedata-after', pageData)
-      tempAllData.push(newPageData)
-      pageDataHasText = false
-      pageSegmentsCount = 0
-      currentSegmentLength = 0
-      pageData = []
+      continue
     }
+    while (pageData.length > 0 && pageData[0].segment_type.includes('linebreak')) {
+      pageData = pageData.splice(1)
+    }
+    // console.log('pagedata-before', pageData)
+    const newPageData = combineSentenceToParagraph(pageData)
+    // console.log('pagedata-after', pageData)
+    tempAllData.push(newPageData)
+    pageDataHasText = false
+    pageSegmentsCount = 0
+    currentSegmentLength = 0
+    pageData = []
   }
+  while (pageData.length > 0 && pageData[0].segment_type.includes('linebreak')) {
+    pageData = pageData.splice(1)
+  }
+  if (pageData.length > 0) {
+    tempAllData.push(combineSentenceToParagraph(pageData))
+  }
+
   return tempAllData
 }
 
@@ -96,4 +103,8 @@ export function compareWordIds(wordId1: string, wordId2: string): number {
     }
   }
   return 0
+}
+
+export function wordIdInRange(curr_word_id: string, start_id: string, end_id: string): boolean {
+  return compareWordIds(curr_word_id, start_id) >= 0 && compareWordIds(curr_word_id, end_id) <= 0
 }

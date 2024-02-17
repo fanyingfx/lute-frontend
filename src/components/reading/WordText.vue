@@ -1,6 +1,6 @@
 <script setup lang="ts" name="WordText">
 import type { WordToken } from '@/Interface'
-import { firstWordId, mouseKeyDown, wordsSelection, wordState } from '@/store'
+import { firstWordId, lastSelectedWord, mouseKeyDown, wordsSelection, wordState } from '@/store'
 import { compareWordIds } from '@/utils/TextUtils'
 
 // const { x, y, sourceType } = useMouse()
@@ -15,15 +15,20 @@ const status_color: { [key: string]: string } = {
   '99': 'text-black',
   '-1': 'text-black'
 }
+let props = defineProps<{
+  word: WordToken
+  word_id: string
+}>()
 
-const word_status_class = computed(() => [
-  'whitespace-normal',
-  'inline-block',
-  '.word_text',
-  'border',
-  'border-x-emerald-400',
-  status_color[`${props.word.word_status}`]
-])
+const isSelected = ref<boolean>(false)
+
+const word_status_class = computed(() => status_color[`${props.word.word_status}`])
+watch(wordsSelection, () => {
+  console.log('wordsSelection changed')
+  isSelected.value =
+    compareWordIds(props.word_id, wordsSelection.start_id) >= 0 &&
+    compareWordIds(props.word_id, wordsSelection.end_id) <= 0
+})
 
 function updateWordState() {
   wordState.value = props.word
@@ -36,16 +41,15 @@ function mouseMove(event: MouseEvent) {
     if (wordsSelection.start_id == '') {
       wordsSelection.start_id = props.word_id
       wordsSelection.end_id = props.word_id
+      lastSelectedWord.value = props.word
     }
     if (
       compareWordIds(props.word_id, wordsSelection.start_id) > 0 ||
       compareWordIds(props.word_id, firstWordId.value) == 0
     ) {
       wordsSelection.end_id = props.word_id
+      lastSelectedWord.value = props.word
     } else if (compareWordIds(props.word_id, wordsSelection.start_id) < 0) {
-      // if (wordsSelection.start_id == wordsSelection.end_id) {
-      //   wordsSelection.end_id = wordsSelection.start_id
-      // }
       wordsSelection.start_id = props.word_id
     }
     // updateSelection()
@@ -53,36 +57,22 @@ function mouseMove(event: MouseEvent) {
 }
 
 function mouseDown(event: MouseEvent) {
+  // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
     firstWordId.value = props.word_id
-    console.log(props.word.word_string)
   }
 
   mouseKeyDown.value = true
 }
-
-// function mouseUp(event: MouseEvent) {
-//   // if (mouseKeyDown.value) {
-//   mouseKeyDown.value = false
-//   // console.log(wordsSelection)
-//   console.log({ start_id: wordsSelection.start_id, end_id: wordsSelection.end_id })
-//
-//   updateSelection()
-//   wordsSelection.start_id = ''
-//   wordsSelection.end_id = ''
-//   // }
-// }
-
-let props = defineProps<{
-  word: WordToken
-  word_id: string
-}>()
 </script>
 
 <template>
   <n-text
-    :class="word_status_class"
+    class="whitespace-normal inline-block border border-x-emerald-400"
+    :class="[word_status_class, { 'bg-yellow-400': isSelected }]"
     :id="word_id"
+    :data-is-word="word.is_word"
+    :data-word-tokens="word.word_tokens"
     @click="updateWordState"
     @mousemove="mouseMove"
     @mousedown="mouseDown"
@@ -91,4 +81,8 @@ let props = defineProps<{
   </n-text>
 </template>
 
-<style scoped></style>
+<style scoped>
+span {
+  user-select: none;
+}
+</style>
