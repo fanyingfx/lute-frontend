@@ -78,3 +78,22 @@ export function bookDatapaginate(bookData: TSegment[], wordsPerPage: number): TS
   }
   return tempAllData
 }
+
+export function compareWordIds(wordId1: string, wordId2: string): number {
+  const w1 = wordId1.replace('para', '').replace('sent', '')
+  const w2 = wordId2.replace('para', '').replace('sent', '')
+  const w1Arr = w1.split('_').map(Number)
+  const w2Arr = w2.split('_').map(Number)
+
+  for (let i = 0; i < w1.length; i++) {
+    if (w1Arr[i] == w2Arr[i]) {
+      continue
+    }
+    if (w1Arr[i] > w2Arr[i]) {
+      return 1
+    } else {
+      return -1
+    }
+  }
+  return 0
+}

@@ -9,7 +9,7 @@ import {
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
 // import { bookDatapaginate } from '@/utils/TextUtils'
-import { bookPageData as pagedData, updateBookPageData } from '@/state'
+import { bookPageData as pagedData, updateBookPageData } from '@/store'
 
 // const wordsPerPage = 800
 const currentPage = ref(1)

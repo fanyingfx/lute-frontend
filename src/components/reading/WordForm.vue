@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { updateBookPageData, wordState } from '@/state'
+import { updateBookPageData, wordState } from '@/store'
 import axios from 'axios'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
@@ -105,6 +105,7 @@ async function onFormSubmit() {
   ::v-deep(.n-form-item .n-form-item-label .n-form-item-label__asterisk) {
     --n-asterisk-color: red;
   }
+
   ::v-deep(.n-form-item .n-form-item-feedback-wrapper) {
     --n-feedback-height: 10px;
   }
