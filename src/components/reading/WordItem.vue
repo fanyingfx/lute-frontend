@@ -23,7 +23,7 @@ let props = defineProps<{
     </n-card>
   </n-popover>
   <WordText :word_id="word_id" :word="word" v-else />
-  <n-text class="whitespace-normal inline-block" v-if="word.next_is_ws">&nbsp;</n-text>
+  <!--  <n-text class="whitespace-normal inline-block" v-if="word.next_is_ws">&nbsp;</n-text>-->
 </template>
 
 <style scoped>

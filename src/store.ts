@@ -79,15 +79,6 @@ export function updateSelection() {
 window.addEventListener('mouseup', () => {
   if (mouseKeyDown.value) {
     mouseKeyDown.value = false
-    // console.log(wordsSelection)
-    // if (compareWordIds(wordsSelection.start_id, wordsSelection.end_id) > 0) {
-    //   const temp_id = wordsSelection.start_id
-    //   if (compareWordIds(wordsSelection.end_id, firstWordId.value) > 0) {
-    //     wordsSelection.end_id = firstWordId.value
-    //   }
-    //   wordsSelection.start_id = wordsSelection.end_id
-    //   wordsSelection.end_id = temp_id
-    // }
     console.log({ start_id: wordsSelection.start_id, end_id: wordsSelection.end_id })
 
     updateSelection()
@@ -96,12 +87,11 @@ window.addEventListener('mouseup', () => {
   }
 })
 
-// export const lastSelectedWordId = ref<string>('')
 export const mouseKeyDown = ref<boolean>(false)
 
 export async function updateBookPageData() {
   const { data } = await axios.get<ServerResponse>(Endpoint.book.test_parser, {
-    params: { booktext_id: 2 }
+    params: { booktext_id: 1 }
   })
   console.log('data', data)
   bookPageData.value = bookDatapaginate(data.data, wordsPerPage.value)

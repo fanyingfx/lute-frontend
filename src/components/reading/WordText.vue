@@ -67,6 +67,7 @@ function mouseDown(event: MouseEvent) {
 </script>
 
 <template>
+  <!--  TODO remove data-attribute using -->
   <n-text
     class="whitespace-normal inline-block border border-x-emerald-400"
     :class="[word_status_class, { 'bg-yellow-400': isSelected }]"
@@ -77,7 +78,7 @@ function mouseDown(event: MouseEvent) {
     @mousemove="mouseMove"
     @mousedown="mouseDown"
   >
-    {{ word.word_string }}
+    {{ word.word_string }}{{ word.next_is_ws ? '&nbsp;' : '' }}
   </n-text>
 </template>
 

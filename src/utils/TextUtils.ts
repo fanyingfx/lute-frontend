@@ -9,6 +9,7 @@ function combineSentenceToParagraph(segments: TSegment[]): TSegment[] {
     paragraph_order: 1
   } as TextParagraphSegment
   let i = 0
+  // TODO using Queue to rewrite the Code
   while (i < segments.length) {
     let segment = segments[i]
     while (i < segments.length && segment.segment_type === 'sentence') {
