@@ -14,6 +14,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "vue",
-    "strict": true
-  }
+    "strict": true,
+  },
+
 }

@@ -10,6 +10,7 @@ defineProps<{
 <template>
   <n-el tag="div" class="border border-b-fuchsia-300">
     <template v-for="(item, index) in segments" :key="index">
+      <!-- @vue-ignore -->
       <TextParagraph v-if="item.segment_type === 'textparagraph'" :paragraph="item" />
       <n-image v-else-if="item.segment_type === 'image'" :alt="item.segment_value"
         >{{ item.segment_value }}

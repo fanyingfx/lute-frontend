@@ -19,7 +19,7 @@ export const bookPageData = ref<TSegment[][]>([
 ])
 
 interface TextSelection {
-  start_id: string,
+  start_id: string
   end_id: string
 }
 
@@ -45,37 +45,46 @@ export function updateSelection() {
     // console.log('rangestr', range?.toString())
     if (lastSelectedWord.value !== null) {
       const ancestorContainer = <HTMLElement>range.commonAncestorContainer
-      const word_tokens = <string[]>Array.from(ancestorContainer.children).filter((e) => {
+      const word_tokens = <string[]>Array.from(ancestorContainer.children)
+        .filter((e) => {
+          const ele = e as HTMLElement
+          return wordIdInRange(ele.id, start_id, end_id) && ele.dataset['isWord'] === 'true'
+        })
+        .flatMap((e) => {
+          const ele = e as HTMLElement
+          const e_word_tokens = ele.dataset['wordTokens']
+          if (e_word_tokens !== undefined && e_word_tokens.includes(',')) {
+            return e_word_tokens.split(',')
+          }
+          return e_word_tokens
+        })
+      // TODO need a better way to handle the punctuation and wordtokens
+      const puncts = <string[]> Array.from(ancestorContainer.children).filter((e) => {
         const ele = e as HTMLElement
-        return wordIdInRange(ele.id, start_id, end_id) &&
-          ele.dataset['isWord'] === 'true'
-      }).flatMap((e) => {
-        const ele = e as HTMLElement
-        const e_word_tokens = ele.dataset['wordTokens']
-        if (e_word_tokens !== undefined && e_word_tokens.includes(',')) {
-          return e_word_tokens.split(',')
-        }
-        return e_word_tokens
-      })
+        return wordIdInRange(ele.id, start_id, end_id) && ele.dataset['isWord'] === 'false'
+      }).map(e=>e.textContent)
+
+
+      let new_word_string= range.toString()
+      for (const punct of puncts) {
+        new_word_string=new_word_string.replace(punct,'')
+      }
 
       const multipleWord = {
-        word_string: range.toString(),
+        word_string: new_word_string,
         word_pos: 'MULTI',
         word_lemma: range.toString(),
         is_multiple_words: true,
         word_tokens: word_tokens,
         next_is_ws: lastSelectedWord.value.next_is_ws
       } as WordToken
-      multipleWord.word_string = range.toString()
+      // multipleWord.word_string = range.toString()
 
       wordState.value = multipleWord
     }
-
   }
-
-
 }
-
+console.log('add mouseup')
 window.addEventListener('mouseup', () => {
   if (mouseKeyDown.value) {
     mouseKeyDown.value = false

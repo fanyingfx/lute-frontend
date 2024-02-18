@@ -69,7 +69,7 @@ function mouseDown(event: MouseEvent) {
 <template>
   <!--  TODO remove data-attribute using -->
   <n-text
-    class="whitespace-normal inline-block border border-x-emerald-400"
+    class="word_text"
     :class="[word_status_class, { 'bg-yellow-400': isSelected }]"
     :id="word_id"
     :data-is-word="word.is_word"
@@ -82,8 +82,12 @@ function mouseDown(event: MouseEvent) {
   </n-text>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 span {
   user-select: none;
+}
+
+.word_text {
+  @apply whitespace-normal inline-block border border-x-emerald-400;
 }
 </style>
