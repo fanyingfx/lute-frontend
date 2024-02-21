@@ -3,9 +3,10 @@ export const Endpoint = {
   book: {
     onebook: '/api/book/one',
     allbook: '/api/book/list',
-    test_parser: '/api/booktext/test_parser'
+    test_parser: '/booktext/test_parser'
   },
   word: {
     create_or_update: '/api/word/create_or_update'
   }
 }
+

@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Endpoint } from '@/api'
 import { ref } from 'vue'
 import { bookDatapaginate, wordIdInRange } from '@/utils/TextUtils'
+import Service from '@/api/config'
 
 export const wordState = ref<WordToken | null>(null)
 export const wordsPerPage = ref(500)
@@ -41,8 +42,6 @@ export function updateSelection() {
     const range = document.createRange()
     range.setStart(startEl, 0)
     range.setEnd(endEl, 1)
-    // const sel = window.getSelection()
-    // console.log('rangestr', range?.toString())
     if (lastSelectedWord.value !== null) {
       const ancestorContainer = <HTMLElement>range.commonAncestorContainer
       const word_tokens = <string[]>Array.from(ancestorContainer.children)
@@ -52,16 +51,16 @@ export function updateSelection() {
         })
         .flatMap((e) => {
           const ele = e as HTMLElement
-          const e_word_tokens = ele.dataset['wordTokens']
-          if (e_word_tokens !== undefined && e_word_tokens.includes(',')) {
-            return e_word_tokens.split(',')
+          const elementWordTokens = ele.dataset['wordTokens']
+          if (elementWordTokens !== undefined && elementWordTokens.includes(',')) {
+            return elementWordTokens.split(',')
           }
-          return e_word_tokens
+          return elementWordTokens
         })
       // TODO need a better way to handle the punctuation and wordtokens
       const puncts = <string[]> Array.from(ancestorContainer.children).filter((e) => {
-        const ele = e as HTMLElement
-        return wordIdInRange(ele.id, start_id, end_id) && ele.dataset['isWord'] === 'false'
+        const elem = e as HTMLElement
+        return wordIdInRange(elem.id, start_id, end_id) && elem.dataset['isWord'] === 'false'
       }).map(e=>e.textContent)
 
 
@@ -84,7 +83,6 @@ export function updateSelection() {
     }
   }
 }
-console.log('add mouseup')
 window.addEventListener('mouseup', () => {
   if (mouseKeyDown.value) {
     mouseKeyDown.value = false
@@ -99,7 +97,10 @@ window.addEventListener('mouseup', () => {
 export const mouseKeyDown = ref<boolean>(false)
 
 export async function updateBookPageData() {
-  const { data } = await axios.get<ServerResponse>(Endpoint.book.test_parser, {
+  // const dt = await Service.get('/book/list')
+  // console.log('test service',dt)
+
+  const  data  = await Service.get<TSegment[]>(Endpoint.book.test_parser, {
     params: { booktext_id: 1 }
   })
   console.log('data', data)
