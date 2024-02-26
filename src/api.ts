@@ -9,4 +9,3 @@ export const Endpoint = {
     create_or_update: '/api/word/create_or_update'
   }
 }
-

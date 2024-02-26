@@ -58,15 +58,16 @@ export function updateSelection() {
           return elementWordTokens
         })
       // TODO need a better way to handle the punctuation and wordtokens
-      const puncts = <string[]> Array.from(ancestorContainer.children).filter((e) => {
-        const elem = e as HTMLElement
-        return wordIdInRange(elem.id, start_id, end_id) && elem.dataset['isWord'] === 'false'
-      }).map(e=>e.textContent)
+      const puncts = <string[]>Array.from(ancestorContainer.children)
+        .filter((e) => {
+          const elem = e as HTMLElement
+          return wordIdInRange(elem.id, start_id, end_id) && elem.dataset['isWord'] === 'false'
+        })
+        .map((e) => e.textContent)
 
-
-      let new_word_string= range.toString()
+      let new_word_string = range.toString()
       for (const punct of puncts) {
-        new_word_string=new_word_string.replace(punct,'')
+        new_word_string = new_word_string.replace(punct, '')
       }
 
       const multipleWord = {
@@ -100,7 +101,7 @@ export async function updateBookPageData() {
   // const dt = await Service.get('/book/list')
   // console.log('test service',dt)
 
-  const  data  = await Service.get<TSegment[]>(Endpoint.book.test_parser, {
+  const data = await Service.get<TSegment[]>(Endpoint.book.test_parser, {
     params: { booktext_id: 1 }
   })
   console.log('data', data)
