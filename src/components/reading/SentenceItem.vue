@@ -1,25 +1,29 @@
 <script setup lang="ts">
 import WordItem from '@/components/reading/WordItem.vue'
-import { type SentenceSegment } from '@/Interface'
+import { type ParsedTextSegment } from '@/Interface'
 
 const props = defineProps<{
-  sentence_segment: SentenceSegment
+  sentenceSegment: ParsedTextSegment
 }>()
 // onMounted(()=>
 // {
 //   console.log(props.sentence_segment)})
-const sentence_id = computed(
-  () => `para${props.sentence_segment.paragraph_order}_sent${props.sentence_segment.sentence_order}`
+const sentenceId = computed(
+  () => `para${props.sentenceSegment.paragraphOrder}_sent${props.sentenceSegment.sentenceOrder}`
 )
 </script>
 <!--    :id="'para' + sentence_segment.paragraph_order + '_sent' + sentence_segment.sentence_order"-->
 
 <template>
-  <n-el tag="span" class="border border-t-blue-400" :id="sentence_id">
-    <template v-for="(item, index) in sentence_segment.segment_value" :key="index">
-      <WordItem :word="item" :word_id="sentence_id + '_' + index" />
+  <span class="sentence" :id="sentenceId">
+    <template v-for="(item, index) in sentenceSegment.segmentWords" :key="index">
+      <WordItem :word="item" :word-id="sentenceId + '_' + index" />
     </template>
-  </n-el>
+  </span>
 </template>
 
-<style scoped></style>
+<style scoped>
+span.sentence {
+  @apply border-r-2 border-r-amber-300;
+}
+</style>

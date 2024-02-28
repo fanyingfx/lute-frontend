@@ -1,20 +1,20 @@
 // import {reactive,} from 'vue'
-import type { ServerResponse, TSegment, WordToken } from '@/Interface'
-import axios from 'axios'
+import type { ParsedTextSegment, ServerResponse, TSegment, WordToken } from '@/Interface'
 import { Endpoint } from '@/api'
 import { ref } from 'vue'
 import { bookDatapaginate, wordIdInRange } from '@/utils/TextUtils'
 import Service from '@/api/config'
 
 export const wordState = ref<WordToken | null>(null)
-export const wordsPerPage = ref(500)
+export const wordsPerPage = ref(250)
 export const bookPageData = ref<TSegment[][]>([
   [
     {
-      segment_type: 'softlinebreak',
-      segment_value: '',
-      segment_raw: '',
-      paragraph_order: 0
+      segmentWords: [],
+      segmentType: 'softlinebreak',
+      segmentValue: '',
+      segmentRaw: '',
+      paragraphOrder: 0
     }
   ]
 ])
@@ -31,6 +31,7 @@ export const wordsSelection = reactive<TextSelection>({
   end_id: ''
 })
 export const firstWordId = ref<string>('')
+export const currentLanguageId = ref(1)
 
 export function updateSelection() {
   const startEl = document.getElementById(wordsSelection.start_id)
@@ -71,12 +72,12 @@ export function updateSelection() {
       }
 
       const multipleWord = {
-        word_string: new_word_string,
-        word_pos: 'MULTI',
-        word_lemma: range.toString(),
-        is_multiple_words: true,
-        word_tokens: word_tokens,
-        next_is_ws: lastSelectedWord.value.next_is_ws
+        wordString: new_word_string,
+        wordPos: 'MULTI',
+        wordLemma: range.toString(),
+        isMultipleWords: true,
+        wordTokens: word_tokens,
+        nextIsWs: lastSelectedWord.value.nextIsWs
       } as WordToken
       // multipleWord.word_string = range.toString()
 
@@ -101,11 +102,11 @@ export async function updateBookPageData() {
   // const dt = await Service.get('/book/list')
   // console.log('test service',dt)
 
-  const data = await Service.get<TSegment[]>(Endpoint.book.test_parser, {
+  const { data } = await Service.get<ParsedTextSegment[]>(Endpoint.book.test_parser, {
     params: { booktext_id: 1 }
   })
   console.log('data', data)
-  bookPageData.value = bookDatapaginate(data.data, wordsPerPage.value)
+  bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
 }
 
 // export const currentBookData;

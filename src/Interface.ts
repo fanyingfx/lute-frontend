@@ -1,48 +1,37 @@
-export interface Segment {
-  segment_type: string
-  segment_value: string | SentenceSegment
-  segment_raw: string
-  paragraph_order: number
-}
-
-export type TSegment = Segment | TextParagraphSegment | SentenceSegment
-
-export interface BasicSegment {
-  segment_type: string
-  segment_value: string
-  segment_raw: string
-  segment_order: number
-}
+export type TSegment = ParsedTextSegment | TextParagraphSegment
 
 export interface WordToken {
-  word_string: string
-  word_lemma: string
-  word_pos?: string
-  is_multiple_words: boolean
-  is_word: boolean
-  is_eos: boolean
-  next_is_ws: boolean
-  word_status: number
-  word_explanation?: string
-  word_pronunciation?: string
-  word_tokens?: string[]
+  wordString: string
+  wordLemma: string
+  wordPos?: string
+  isMultipleWords: boolean
+  isWord: boolean
+  isEos: boolean
+  nextIsWs: boolean
+  wordStatus: number
+  wordExplanation?: string
+  wordPronunciation?: string
+  wordTokens?: string[]
 }
 
-export interface SentenceSegment {
-  segment_value: WordToken[]
-  segment_type: string
-  segment_raw: string
-  paragraph_order: number
-  sentence_order: number
+export interface ParsedTextSegment {
+  // If the segmentType==='sentence', this will be an array of WordToken
+  segmentWords: WordToken[]
+  segmentValue: string
+  segmentRaw: string
+  segmentType: string
+  paragraphOrder: number
+  sentenceOrder: number
 }
 
 export interface TextParagraphSegment {
-  segment_value: SentenceSegment[]
-  segment_type: string
-  segment_raw: string
-  paragraph_order: number
+  segmentWords: ParsedTextSegment[]
+  segmentValue: string
+  segmentType: string
+  segmentRaw: string
+  paragraphOrder: number
 }
 
 export interface ServerResponse {
-  data: TSegment[]
+  data: ParsedTextSegment[]
 }

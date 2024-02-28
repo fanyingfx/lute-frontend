@@ -1,47 +1,51 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { updateBookPageData, wordState } from '@/store'
+import { currentLanguageId, updateBookPageData, wordState } from '@/store'
 import axios from 'axios'
+import Service from '@/api/config'
+import { Endpoint } from '@/api'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
 
 const wordModel = reactive({
-  word_string: wordState.value?.word_string,
-  word_lemma: wordState.value?.word_lemma,
-  word_pos: wordState.value?.word_pos,
-  word_explanation: wordState.value?.word_explanation,
-  word_status: wordState.value?.word_status,
-  word_pronunciation: wordState.value?.word_pronunciation,
-  word_tokens: [wordState.value?.word_string],
-  next_is_ws: false,
-  word_counts: 1
+  wordString: wordState.value?.wordString,
+  wordLemma: wordState.value?.wordLemma,
+  wordPos: wordState.value?.wordPos,
+  wordExplanation: wordState.value?.wordExplanation,
+  wordStatus: wordState.value?.wordStatus ?? 1,
+  wordPronunciation: wordState.value?.wordPronunciation,
+  wordTokens: [wordState.value?.wordString],
+  nextIsWs: false,
+  wordCounts: 1,
+  languageId: currentLanguageId.value
 })
 
 watch(wordState, () => {
   if (wordState.value !== null) {
-    wordModel.word_string = wordState.value.word_string
-    wordModel.word_explanation = wordState.value.word_explanation
-    wordModel.word_status = wordState.value.word_status
-    wordModel.word_pos = wordState.value.word_pos
-    wordModel.word_lemma = wordState.value.word_lemma
-    if (!wordState.value.is_multiple_words) {
-      wordModel.word_tokens = [wordState.value.word_string]
-      wordModel.word_counts = 1
-    } else if (wordState.value.word_tokens !== undefined) {
-      wordModel.word_counts = wordState.value.word_tokens.length
-      wordModel.word_tokens = wordState.value.word_tokens
+    wordModel.wordString = wordState.value.wordString
+    wordModel.wordExplanation = wordState.value.wordExplanation
+    wordModel.wordStatus = wordState.value.wordStatus
+
+    wordModel.wordPos = wordState.value.wordPos
+    wordModel.wordLemma = wordState.value.wordLemma
+    if (!wordState.value.isMultipleWords) {
+      wordModel.wordTokens = [wordState.value.wordString]
+      wordModel.wordCounts = 1
+    } else if (wordState.value.wordTokens !== undefined) {
+      wordModel.wordCounts = wordState.value.wordTokens.length
+      wordModel.wordTokens = wordState.value.wordTokens
     }
+    wordModel.languageId = currentLanguageId.value
   }
 })
 // console.log('wordToken',wordState.value)
 // console.log('wordModel',wordModel)
 async function onFormSubmit() {
-  const url = 'http://127.0.0.1:8000/word/create_or_update'
   // const formData = JSON.stringify(wordModel)
   console.log('req', wordModel)
   try {
-    const res = await axios.post(url, JSON.stringify(wordModel))
+    const res = await Service.post(Endpoint.word.create_or_update, JSON.stringify(wordModel))
     console.log('res', res)
   } catch (e) {
     console.log(e)
@@ -65,13 +69,13 @@ async function onFormSubmit() {
       class="word-form"
     >
       <n-form-item label="word">
-        <n-text :strong="true">{{ wordModel.word_string }}</n-text>
+        <n-text :strong="true">{{ wordModel.wordString }}</n-text>
       </n-form-item>
       <n-form-item label="Explanation" path="textareaValue">
         <n-input
-          v-model:value="wordModel.word_explanation"
+          v-model:value="wordModel.wordExplanation"
           placeholder="Textarea"
-          :style="{ maxWidth: '480px' }"
+          :style="{ maxWidth: '80%' }"
           type="textarea"
           :autosize="{
             minRows: 3,
@@ -80,14 +84,14 @@ async function onFormSubmit() {
         />
       </n-form-item>
       <n-form-item label="Status" path="status">
-        <n-input-number v-model:value="wordModel.word_status" />
+        <n-input-number v-model:value="wordModel.wordStatus" />
       </n-form-item>
 
       <n-form-item label="Pronunciation" path="pronunciation">
         <n-input
-          v-model:value="wordModel.word_pronunciation"
+          v-model:value="wordModel.wordPronunciation"
           placeholder="Pronunciation"
-          :style="{ maxWidth: '480px' }"
+          :style="{ maxWidth: '80%' }"
           type="text"
         />
       </n-form-item>
@@ -96,7 +100,7 @@ async function onFormSubmit() {
         <n-button>Delete</n-button>
         <n-button @click="onFormSubmit">Save</n-button>
       </div>
-      <n-text>{{ wordModel.word_tokens }}</n-text>
+      <n-text>{{ wordModel.wordTokens }}</n-text>
 
       <!--      </n-form-item>-->
     </n-form>
@@ -106,14 +110,6 @@ async function onFormSubmit() {
 
 <style scoped>
 .word-form {
-  width: 280px;
-
-  ::v-deep(.n-form-item .n-form-item-label .n-form-item-label__asterisk) {
-    --n-asterisk-color: red;
-  }
-
-  ::v-deep(.n-form-item .n-form-item-feedback-wrapper) {
-    --n-feedback-height: 10px;
-  }
+  width: 80%;
 }
 </style>

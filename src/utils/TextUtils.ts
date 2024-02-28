@@ -1,48 +1,52 @@
-import type { SentenceSegment, TextParagraphSegment, TSegment } from '@/Interface'
+import type { ParsedTextSegment, TextParagraphSegment, TSegment } from '@/Interface'
 
-function combineSentenceToParagraph(segments: TSegment[]): TSegment[] {
+function combineSentenceToParagraph(segments: ParsedTextSegment[]): TSegment[] {
   const segmentArray = [] as TSegment[]
-  let curr_paragraph_order: number = 1
+  let currParagraphOrder: number = 1
   let textParagraphSegment = {
-    segment_type: 'textparagraph',
-    segment_value: [] as SentenceSegment[],
-    paragraph_order: 1
+    segmentType: 'textparagraph',
+    segmentRaw: '',
+    segmentWords: [] as ParsedTextSegment[],
+    paragraphOrder: 1
   } as TextParagraphSegment
   let i = 0
   // TODO using Queue to rewrite the Code
   while (i < segments.length) {
     let segment = segments[i]
-    while (i < segments.length && segment.segment_type === 'sentence') {
-      if (segment.paragraph_order !== curr_paragraph_order) {
-        if (textParagraphSegment.segment_value.length > 0) {
+    while (i < segments.length && segment.segmentType === 'sentence') {
+      if (segment.paragraphOrder !== currParagraphOrder) {
+        if (textParagraphSegment.segmentWords.length > 0) {
           segmentArray.push(textParagraphSegment)
         }
         textParagraphSegment = {
-          segment_type: 'textparagraph',
-          segment_value: [] as SentenceSegment[],
-          paragraph_order: segment.paragraph_order
+          segmentType: 'textparagraph',
+          segmentWords: [] as ParsedTextSegment[],
+          paragraphOrder: segment.paragraphOrder
         } as TextParagraphSegment
-        curr_paragraph_order = segment.paragraph_order
+        currParagraphOrder = segment.paragraphOrder
       }
-      textParagraphSegment.segment_value.push(<SentenceSegment>segment)
+      textParagraphSegment.segmentWords.push(<ParsedTextSegment>segment)
       i++
       segment = segments[i]
     }
-    if (textParagraphSegment.segment_value.length > 0) {
+    if (textParagraphSegment.segmentWords.length > 0) {
       segmentArray.push(structuredClone(textParagraphSegment))
     }
     if (segment !== undefined) {
       segmentArray.push(segment)
     }
-    textParagraphSegment.segment_value = []
+    textParagraphSegment.segmentWords = []
     i++
   }
   return segmentArray
 }
 
-export function bookDatapaginate(bookData: TSegment[], wordsPerPage: number): TSegment[][] {
+export function bookDatapaginate(
+  bookData: ParsedTextSegment[],
+  wordsPerPage: number
+): TSegment[][] {
   const tempAllData = [] as TSegment[][]
-  let pageData = [] as TSegment[]
+  let pageData = [] as ParsedTextSegment[]
   let pageDataHasText = false
   let pageSegmentsCount = 0
   let currentSegmentLength = 0
@@ -51,21 +55,22 @@ export function bookDatapaginate(bookData: TSegment[], wordsPerPage: number): TS
   while (index < bookData.length) {
     const segment = bookData[index]
 
-    if (segment.segment_type === 'sentence') {
-      currentSegmentLength = pageSegmentsCount + segment.segment_raw.length
+    if (segment.segmentType === 'sentence') {
+      currentSegmentLength = pageSegmentsCount + segment.segmentWords.length
     }
 
     if (currentSegmentLength < wordsPerPage || !pageDataHasText) {
       pageData.push(segment)
       index++
       // bookData.splice(1)
-      if (segment.segment_type === 'sentence') {
+      if (segment.segmentType === 'sentence') {
         pageDataHasText = true
       }
       pageSegmentsCount = currentSegmentLength
+      // add sentence to pageData until the page token size is greater than wordsPerPage
       continue
     }
-    while (pageData.length > 0 && pageData[0].segment_type.includes('linebreak')) {
+    while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
       pageData = pageData.splice(1)
     }
     // console.log('pagedata-before', pageData)
@@ -77,7 +82,7 @@ export function bookDatapaginate(bookData: TSegment[], wordsPerPage: number): TS
     currentSegmentLength = 0
     pageData = []
   }
-  while (pageData.length > 0 && pageData[0].segment_type.includes('linebreak')) {
+  while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
     pageData = pageData.splice(1)
   }
   if (pageData.length > 0) {

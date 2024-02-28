@@ -17,21 +17,23 @@ const status_color: { [key: string]: string } = {
 }
 let props = defineProps<{
   word: WordToken
-  word_id: string
+  wordId: string
 }>()
 
 const isSelected = ref<boolean>(false)
 
-const word_status_class = computed(() => status_color[`${props.word.word_status}`])
+const wordStatusClass = computed(() => status_color[`${props.word.wordStatus}`])
 watch(wordsSelection, () => {
   console.log('wordsSelection changed')
   isSelected.value =
-    compareWordIds(props.word_id, wordsSelection.start_id) >= 0 &&
-    compareWordIds(props.word_id, wordsSelection.end_id) <= 0
+    compareWordIds(props.wordId, wordsSelection.start_id) >= 0 &&
+    compareWordIds(props.wordId, wordsSelection.end_id) <= 0
 })
 
 function updateWordState() {
-  wordState.value = props.word
+  let currWord = Object.assign({}, props.word)
+  currWord.wordStatus = currWord.wordStatus > 0 ? currWord.wordStatus : 1
+  wordState.value = currWord
 }
 
 // const textRef = ref<HTMLElement | null>(null)
@@ -39,18 +41,18 @@ function updateWordState() {
 function mouseMove(event: MouseEvent) {
   if (mouseKeyDown.value) {
     if (wordsSelection.start_id == '') {
-      wordsSelection.start_id = props.word_id
-      wordsSelection.end_id = props.word_id
+      wordsSelection.start_id = props.wordId
+      wordsSelection.end_id = props.wordId
       lastSelectedWord.value = props.word
     }
     if (
-      compareWordIds(props.word_id, wordsSelection.start_id) > 0 ||
-      compareWordIds(props.word_id, firstWordId.value) == 0
+      compareWordIds(props.wordId, wordsSelection.start_id) > 0 ||
+      compareWordIds(props.wordId, firstWordId.value) == 0
     ) {
-      wordsSelection.end_id = props.word_id
+      wordsSelection.end_id = props.wordId
       lastSelectedWord.value = props.word
-    } else if (compareWordIds(props.word_id, wordsSelection.start_id) < 0) {
-      wordsSelection.start_id = props.word_id
+    } else if (compareWordIds(props.wordId, wordsSelection.start_id) < 0) {
+      wordsSelection.start_id = props.wordId
     }
     // updateSelection()
   }
@@ -59,7 +61,7 @@ function mouseMove(event: MouseEvent) {
 function mouseDown(event: MouseEvent) {
   // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
-    firstWordId.value = props.word_id
+    firstWordId.value = props.wordId
   }
 
   mouseKeyDown.value = true
@@ -70,15 +72,15 @@ function mouseDown(event: MouseEvent) {
   <!--  TODO remove data-attribute using -->
   <n-text
     class="word_text"
-    :class="[word_status_class, { 'bg-yellow-400': isSelected }]"
-    :id="word_id"
-    :data-is-word="word.is_word"
-    :data-word-tokens="word.word_tokens"
+    :class="[wordStatusClass, { 'bg-yellow-400': isSelected }]"
+    :id="wordId"
+    :data-is-word="word.isWord"
+    :data-word-tokens="word.wordTokens"
     @click="updateWordState"
     @mousemove="mouseMove"
     @mousedown="mouseDown"
   >
-    {{ word.word_string }}{{ word.next_is_ws ? '&nbsp;' : '' }}
+    {{ word.wordString }}{{ word.nextIsWs ? '&nbsp;' : '' }}
   </n-text>
 </template>
 
@@ -88,6 +90,6 @@ span {
 }
 
 .word_text {
-  @apply whitespace-normal inline-block border border-x-emerald-400;
+  @apply whitespace-normal inline-block;
 }
 </style>

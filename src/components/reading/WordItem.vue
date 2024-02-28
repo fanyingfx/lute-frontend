@@ -9,21 +9,20 @@ import WordText from '@/components/reading/WordText.vue'
 
 let props = defineProps<{
   word: WordToken
-  word_id: string
+  wordId: string
 }>()
 </script>
 
 <template>
-  <n-popover v-if="word.word_status > 0" placement="bottom" trigger="hover">
+  <n-popover v-if="word.wordStatus > 0" placement="bottom" trigger="hover">
     <template #trigger>
-      <WordText :word_id="word_id" :word="word" />
+      <WordText :word-id="wordId" :word="word" />
     </template>
-    <n-card :title="word.word_string">
-      <n-text>{{ word.word_explanation }}</n-text>
+    <n-card :title="word.wordString">
+      <n-text>{{ word.wordExplanation }}</n-text>
     </n-card>
   </n-popover>
-  <WordText :word_id="word_id" :word="word" v-else />
-  <!--  <n-text class="whitespace-normal inline-block" v-if="word.next_is_ws">&nbsp;</n-text>-->
+  <WordText :word-id="wordId" :word="word" v-else />
 </template>
 
 <style scoped>
