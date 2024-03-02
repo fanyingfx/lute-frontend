@@ -1,0 +1,136 @@
+{
+  "data": [
+    {
+      "segmentWords": [
+        {
+          "wordString": "Curiouser",
+          "wordLemma": "curiouser",
+          "wordPos": "NOUN",
+          "isMultipleWords": false,
+          "isWord": true,
+          "isEos": false,
+          "nextIsWs": true,
+          "wordStatus": 0,
+          "wordTokens": [
+            "Curiouser"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        },
+        {
+          "wordString": "and",
+          "wordLemma": "and",
+          "wordPos": "CCONJ",
+          "isMultipleWords": false,
+          "isWord": true,
+          "isEos": false,
+          "nextIsWs": true,
+          "wordStatus": 0,
+          "wordTokens": [
+            "and"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        },
+        {
+          "wordString": "curiouser",
+          "wordLemma": "curiouser",
+          "wordPos": "NOUN",
+          "isMultipleWords": false,
+          "isWord": true,
+          "isEos": false,
+          "nextIsWs": false,
+          "wordStatus": 0,
+          "wordTokens": [
+            "curiouser"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        },
+        {
+          "wordString": "!",
+          "wordLemma": "!",
+          "wordPos": "PUNCT",
+          "isMultipleWords": false,
+          "isWord": false,
+          "isEos": true,
+          "nextIsWs": true,
+          "wordStatus": 0,
+          "wordTokens": [
+            "!"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        }
+      ],
+      "segmentValue": "",
+      "segmentRaw": "",
+      "segmentType": "sentence",
+      "paragraphOrder": 1,
+      "sentenceOrder": 1
+    },
+    {
+      "segmentWords": [
+        {
+          "wordString": "Help",
+          "wordLemma": "help",
+          "wordPos": "VERB",
+          "isMultipleWords": false,
+          "isWord": true,
+          "isEos": false,
+          "nextIsWs": false,
+          "wordStatus": 0,
+          "wordTokens": [
+            "Help"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        },
+        {
+          "wordString": "!",
+          "wordLemma": "!",
+          "wordPos": "PUNCT",
+          "isMultipleWords": false,
+          "isWord": false,
+          "isEos": true,
+          "nextIsWs": true,
+          "wordStatus": 0,
+          "wordTokens": [
+            "!"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        }
+      ],
+      "segmentValue": "",
+      "segmentRaw": "",
+      "segmentType": "sentence",
+      "paragraphOrder": 1,
+      "sentenceOrder": 2
+    },
+    {
+      "segmentWords": [
+        {
+          "wordString": "Help",
+          "wordLemma": "help",
+          "wordPos": "VERB",
+          "isMultipleWords": false,
+          "isWord": true,
+          "isEos": true,
+          "nextIsWs": false,
+          "wordStatus": 0,
+          "wordTokens": [
+            "Help"
+          ],
+          "wordPronunciation": "",
+          "wordExplanation": ""
+        }
+      ],
+      "segmentValue": "",
+      "segmentRaw": "",
+      "segmentType": "sentence",
+      "paragraphOrder": 1,
+      "sentenceOrder": 3
+    }
+  ]
+}

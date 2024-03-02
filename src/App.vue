@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import Reading from '@/views/ReadingView.vue'
+// import Reading from '@/views/ReadingView.vue'
 </script>
 
 <template>
-  <main class="min-h-full flex flex-col items-center justify-center" id="reading">
-    <!--  <main class="min-h-screen min-w-full">-->
-
-    <Reading />
+  <!--  <main class="min-h-full flex flex-col items-center justify-center" id="reading">-->
+  <!--  <main class="min-h-screen min-w-full">-->
+  <main>
+    <router-view></router-view>
+    <!--    <Reading />-->
     <!--     <SplitText/>-->
   </main>
 </template>

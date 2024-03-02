@@ -5,11 +5,13 @@ import type { WordToken } from '@/Interface'
 import TextReadingComponent from '@/components/reading/ReadingPage.vue'
 import {
   ChevronBackSharp as BackSharp,
-  ChevronForwardSharp as ForwardSharp
+  ChevronForwardSharp as ForwardSharp,
+  Home
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
 // import { bookDatapaginate } from '@/utils/TextUtils'
 import { bookPageData as pagedData, updateBookPageData } from '@/store'
+import HomeView from '@/views/HomeView.vue'
 
 // const wordsPerPage = 800
 const currentPage = ref(1)
@@ -56,6 +58,11 @@ const currentWordToken = ref<WordToken | null>(null)
 provide('wordToken', currentWordToken)
 </script>
 <template>
+  <n-breadcrumb>
+    <n-breadcrumb-item>
+      <RouterLink to="/home"> <n-icon :component="Home" />Home </RouterLink>
+    </n-breadcrumb-item>
+  </n-breadcrumb>
   <n-split direction="horizontal" class="min-h-screen" :max="0.75" :min="0.25">
     <template #1>
       <n-flex class="border border-sky-500" vertical id="left_pane" style="height: 100%">

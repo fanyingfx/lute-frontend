@@ -3,7 +3,7 @@ import type { ParsedTextSegment, ServerResponse, TSegment, WordToken } from '@/I
 import { Endpoint } from '@/api'
 import { ref } from 'vue'
 import { bookDatapaginate, wordIdInRange } from '@/utils/TextUtils'
-import Service from '@/api/config'
+import Service, { KyService } from '@/api/config'
 
 export const wordState = ref<WordToken | null>(null)
 export const wordsPerPage = ref(250)
@@ -101,10 +101,13 @@ export const mouseKeyDown = ref<boolean>(false)
 export async function updateBookPageData() {
   // const dt = await Service.get('/book/list')
   // console.log('test service',dt)
+  const { data } = await KyService.get(Endpoint.book.test_parser, {
+    searchParams: { booktext_id: 1 }
+  }).json<ServerResponse>()
 
-  const { data } = await Service.get<ParsedTextSegment[]>(Endpoint.book.test_parser, {
-    params: { booktext_id: 1 }
-  })
+  // const { data } = await Service.get<ParsedTextSegment[]>(Endpoint.book.test_parser, {
+  //   params: { booktext_id: 1 }
+  // })
   console.log('data', data)
   bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
 }
