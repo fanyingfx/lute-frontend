@@ -5,9 +5,6 @@ import { type ParsedTextSegment } from '@/Interface'
 const props = defineProps<{
   sentenceSegment: ParsedTextSegment
 }>()
-// onMounted(()=>
-// {
-//   console.log(props.sentence_segment)})
 const sentenceId = computed(
   () => `para${props.sentenceSegment.paragraphOrder}_sent${props.sentenceSegment.sentenceOrder}`
 )

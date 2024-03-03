@@ -7,7 +7,7 @@ import WordText from '@/components/reading/WordText.vue'
 // const trigger_type = computed(() => (props.word.word_status > 0 ? 'hover' : 'manual'))
 // const textState = useTextSelection()
 
-let props = defineProps<{
+const props = defineProps<{
   word: WordToken
   wordId: string
 }>()

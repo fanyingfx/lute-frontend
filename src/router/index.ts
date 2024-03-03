@@ -17,6 +17,10 @@ const router = createRouter({
       path: '/reading',
       name: 'reading',
       component: ReadingView
+    },
+    {
+      path: '/',
+      redirect: '/home'
     }
   ]
 })

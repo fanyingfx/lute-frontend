@@ -9,18 +9,13 @@ import {
   Home
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
-// import { bookDatapaginate } from '@/utils/TextUtils'
 import { bookPageData as pagedData, updateBookPageData } from '@/store'
-import HomeView from '@/views/HomeView.vue'
 
-// const wordsPerPage = 800
 const currentPage = ref(1)
-// let loading = false
 
 const currentPageData = computed(() => {
   return pagedData.value[currentPage.value - 1]
 })
-// let allData = [] as TSegment[]
 const readingPanelRef = ref(null)
 // const pagedData = ref<TSegment[][]>([[{
 //   'segment_type': 'softlinebreak',
@@ -109,8 +104,10 @@ provide('wordToken', currentWordToken)
     <template #2>
       <n-split direction="vertical" style="height: 100%">
         <template #1>
-          <n-h1>DB Word Page</n-h1>
-          <WordForm />
+          <n-scrollbar style="height: 100%">
+            <n-h1>DB Word Page</n-h1>
+            <WordForm />
+          </n-scrollbar>
           <!--          <span>Work In Process</span>-->
         </template>
         <template #2>

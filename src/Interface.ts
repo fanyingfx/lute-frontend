@@ -11,7 +11,8 @@ export interface WordToken {
   wordStatus: number
   wordExplanation?: string
   wordPronunciation?: string
-  wordTokens?: string[]
+  wordTokens: string[]
+  wordDbId: number
 }
 
 export interface ParsedTextSegment {

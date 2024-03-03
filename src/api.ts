@@ -6,6 +6,7 @@ export const Endpoint = {
     test_parser: 'booktext/test_parser'
   },
   word: {
-    create_or_update: 'word/create_or_update'
+    create_or_update: 'word/create_or_update',
+    delete: 'word/delete'
   }
 }
