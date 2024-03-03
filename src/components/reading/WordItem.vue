@@ -18,7 +18,7 @@ let props = defineProps<{
     <template #trigger>
       <WordText :word-id="wordId" :word="word" />
     </template>
-    <n-card :title="word.wordString">
+    <n-card :id="`popcard_${wordId}`" :title="word.wordString">
       <n-text>{{ word.wordExplanation }}</n-text>
     </n-card>
   </n-popover>
