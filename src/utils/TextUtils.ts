@@ -45,11 +45,22 @@ export function bookDatapaginate(
   bookData: ParsedTextSegment[],
   wordsPerPage: number
 ): TSegment[][] {
+  /**
+   * @remarks
+   * This TypeScript function takes an array of ParsedTextSegment,
+   * and a number representing words per page,
+   *  and paginates the book data by breaking it down into pages based on the words per page.
+   * It uses a while loop to iterate through the book data, adding segments to each page
+   *  until the word limit is reached, and then combining the segments into paragraphs
+   * and pushing them into the result array.
+   * The function returns the paginated data as an array of arrays of TSegment.
+   */
   function removeHeadEmptyLineBreaks() {
     while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
       pageData = pageData.splice(1)
     }
   }
+
   const tempAllData = [] as TSegment[][]
   let pageData = [] as ParsedTextSegment[]
   let pageDataHasText = false
