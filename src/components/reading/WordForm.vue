@@ -7,6 +7,7 @@ import type { WordToken } from '@/Interface'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
+
 interface IWordModel {
   wordString: string
   wordLemma: string
@@ -20,16 +21,16 @@ interface IWordModel {
   languageId: number
   wordDbId?: number
 }
-// const wordModel = reactive<IWordModel>(null)
+
 const wordModel = reactive<IWordModel>({
-  wordString: wordState.value?.wordString ?? '',
+  wordString: wordState.value?.wordString.trim() ?? '',
   wordLemma: '',
   wordPos: 'n',
   wordExplanation: '',
   wordStatus: 1,
   wordPronunciation: '',
   wordTokens: [''],
-  nextIsWs: false,
+  nextIsWs: wordState.value?.nextIsWs ?? false,
   wordCounts: 1,
   languageId: currentLanguageId.value,
   wordDbId: -1
@@ -41,24 +42,23 @@ watch(wordState, () => {
     wordModel.wordExplanation = wordState.value.wordExplanation ?? ''
     wordModel.wordStatus = wordState.value.wordStatus
     wordModel.wordPos = wordState.value.wordPos ?? ''
+    wordModel.wordTokens = wordState.value.wordTokens!
     wordModel.wordLemma = wordState.value.wordLemma
-    if (!wordState.value.isMultipleWords) {
-      wordModel.wordTokens = [wordState.value.wordString]
-      wordModel.wordCounts = 1
-    } else if (wordState.value.wordTokens !== undefined) {
-      wordModel.wordCounts = wordState.value.wordTokens.length
-      wordModel.wordTokens = wordState.value.wordTokens
-    }
+    wordModel.wordCounts = wordState.value.wordTokens.length
     wordModel.wordDbId = wordState.value.wordDbId
     wordModel.languageId = currentLanguageId.value
+    wordModel.nextIsWs = wordState.value.nextIsWs
   }
 })
+
 async function onFormSubmit() {
   try {
-    delete wordModel['wordDbId']
+    // delete wordModel['wordDbId']
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { wordDbId: _, ...req } = wordModel
     console.log('req', wordModel)
     const res = await KyService.post(Endpoint.word.create_or_update, {
-      json: wordModel
+      json: req
     }).json<WordToken>()
     wordModel.wordDbId = res.wordDbId
     // console.log('res', resData)
@@ -66,11 +66,8 @@ async function onFormSubmit() {
     console.log(e)
   }
   await updateBookPageData()
-  // const {data} = await axios.get<ServerResponse>(Endpoint.book.test_parser, { params: { booktext_id: 1 } })
-  // bookPageData.value=bookDatapaginate(data.data, wordsPerPage.value)
-  // console.log('update bookPageData',bookPageData.value)
-  //
 }
+
 async function onDelete() {
   console.log(`delete Word ${wordModel.wordString}, dbId=${wordModel.wordDbId}`)
   try {

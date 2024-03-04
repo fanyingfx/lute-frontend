@@ -45,6 +45,11 @@ export function bookDatapaginate(
   bookData: ParsedTextSegment[],
   wordsPerPage: number
 ): TSegment[][] {
+  function removeHeadEmptyLineBreaks() {
+    while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
+      pageData = pageData.splice(1)
+    }
+  }
   const tempAllData = [] as TSegment[][]
   let pageData = [] as ParsedTextSegment[]
   let pageDataHasText = false
@@ -62,7 +67,6 @@ export function bookDatapaginate(
     if (currentSegmentLength < wordsPerPage || !pageDataHasText) {
       pageData.push(segment)
       index++
-      // bookData.splice(1)
       if (segment.segmentType === 'sentence') {
         pageDataHasText = true
       }
@@ -70,9 +74,7 @@ export function bookDatapaginate(
       // add sentence to pageData until the page token size is greater than wordsPerPage
       continue
     }
-    while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
-      pageData = pageData.splice(1)
-    }
+    removeHeadEmptyLineBreaks()
     // console.log('pagedata-before', pageData)
     const newPageData = combineSentenceToParagraph(pageData)
     // console.log('pagedata-after', pageData)

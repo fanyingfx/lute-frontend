@@ -1,7 +1,14 @@
-<script setup lang="ts" name="WordText">
+<script setup lang="ts" >
 import type { WordToken } from '@/Interface'
-import { firstWordId, lastSelectedWord, mouseKeyDown, wordsSelection, wordState } from '@/store'
-import { compareWordIds } from '@/utils/TextUtils'
+import {
+  firstWordId,
+  lastSelectedWord,
+  mouseKeyDown,
+  wordList,
+  wordsSelection,
+  wordState
+} from '@/store'
+import { compareWordIds, wordIdInRange } from '@/utils/TextUtils'
 
 // const { x, y, sourceType } = useMouse()
 
@@ -36,9 +43,7 @@ function updateWordState() {
   wordState.value = currWord
 }
 
-// const textRef = ref<HTMLElement | null>(null)
-
-function mouseMove(event: MouseEvent) {
+function mouseMove() {
   if (mouseKeyDown.value) {
     if (wordsSelection.start_id == '') {
       wordsSelection.start_id = props.wordId
@@ -54,11 +59,16 @@ function mouseMove(event: MouseEvent) {
     } else if (compareWordIds(props.wordId, wordsSelection.start_id) < 0) {
       wordsSelection.start_id = props.wordId
     }
-    // updateSelection()
+    if (
+      wordIdInRange(props.wordId, wordsSelection.start_id, wordsSelection.end_id) &&
+      !wordList.value.map((w) => w.word_id).includes(props.wordId)
+    ) {
+      wordList.value.push({ word_id: props.wordId, word: props.word })
+    }
   }
 }
 
-function mouseDown(event: MouseEvent) {
+function mouseDown() {
   // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
     firstWordId.value = props.wordId
