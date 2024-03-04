@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { currentLanguageId, updateBookPageData, wordState } from '@/store'
-import { KyService } from '@/api/config'
+import { currentLanguageId, resetWordsSelection, updateBookPageData, wordState } from '@/store'
+import KyService from '@/api/config'
 import { Endpoint } from '@/api'
 import type { WordToken } from '@/Interface'
 
@@ -66,6 +66,7 @@ async function onFormSubmit() {
     console.log(e)
   }
   await updateBookPageData()
+  resetWordsSelection()
 }
 
 async function onDelete() {
@@ -80,6 +81,7 @@ async function onDelete() {
   await updateBookPageData()
   wordModel.wordStatus = 1
   wordModel.wordDbId = -1
+  resetWordsSelection()
 }
 </script>
 

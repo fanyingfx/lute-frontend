@@ -16,16 +16,4 @@ const KyService = ky.create({
   headers: { 'Content-Type': 'application/json;charset=utf-8' }
 })
 
-Service.interceptors.request.use((request) => {
-  console.log('request url', request.url)
-  console.log('request baseURL', request.baseURL)
-
-  return request
-})
-
-Service.interceptors.response.use((response) => {
-  return response.data
-})
-
-export default Service
-export { KyService }
+export default KyService

@@ -2,11 +2,6 @@
 import { type WordToken } from '@/Interface'
 import WordText from '@/components/reading/WordText.vue'
 
-// https://tailwindcss.com/docs/text-color
-
-// const trigger_type = computed(() => (props.word.word_status > 0 ? 'hover' : 'manual'))
-// const textState = useTextSelection()
-
 const props = defineProps<{
   word: WordToken
   wordId: string

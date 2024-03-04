@@ -115,11 +115,7 @@ export function compareWordIds(wordId1: string, wordId2: string): number {
     if (w1Arr[i] == w2Arr[i]) {
       continue
     }
-    if (w1Arr[i] > w2Arr[i]) {
-      return 1
-    } else {
-      return -1
-    }
+    return w1Arr[i] > w2Arr[i] ? 1 : -1
   }
   return 0
 }

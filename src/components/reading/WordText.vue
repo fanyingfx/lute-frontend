@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import type { WordToken } from '@/Interface'
-import {
-  firstWordId,
-  lastSelectedWord,
-  mouseKeyDown,
-  wordList,
-  wordsSelection,
-  wordState
-} from '@/store'
+import { firstWordId, mouseKeyDown, wordList, wordsSelection, wordState } from '@/store'
 import { compareWordIds, wordIdInRange } from '@/utils/TextUtils'
 
-// const { x, y, sourceType } = useMouse()
-
+let props = defineProps<{
+  word: WordToken
+  wordId: string
+}>()
+// https://tailwindcss.com/docs/text-color
 const status_color: { [key: string]: string } = {
   '0': 'text-sky-600',
   '1': 'text-yellow-600',
@@ -22,50 +18,16 @@ const status_color: { [key: string]: string } = {
   '99': 'text-black',
   '-1': 'text-black'
 }
-let props = defineProps<{
-  word: WordToken
-  wordId: string
-}>()
-
-const isSelected = ref<boolean>(false)
-
 const wordStatusClass = computed(() => status_color[`${props.word.wordStatus}`])
-watch(wordsSelection, () => {
-  console.log('wordsSelection changed')
-  isSelected.value =
-    compareWordIds(props.wordId, wordsSelection.start_id) >= 0 &&
-    compareWordIds(props.wordId, wordsSelection.end_id) <= 0
-})
+// TODO test word select function, maybe need e2e test
+const isSelected = computed(() =>
+  wordIdInRange(props.wordId, wordsSelection.start_id, wordsSelection.end_id)
+)
 
 function updateWordState() {
-  let currWord = Object.assign({}, props.word)
+  const currWord = { ...props.word }
   currWord.wordStatus = currWord.wordStatus > 0 ? currWord.wordStatus : 1
   wordState.value = currWord
-}
-
-function mouseMove() {
-  if (mouseKeyDown.value) {
-    if (wordsSelection.start_id == '') {
-      wordsSelection.start_id = props.wordId
-      wordsSelection.end_id = props.wordId
-      lastSelectedWord.value = props.word
-    }
-    if (
-      compareWordIds(props.wordId, wordsSelection.start_id) > 0 ||
-      compareWordIds(props.wordId, firstWordId.value) == 0
-    ) {
-      wordsSelection.end_id = props.wordId
-      lastSelectedWord.value = props.word
-    } else if (compareWordIds(props.wordId, wordsSelection.start_id) < 0) {
-      wordsSelection.start_id = props.wordId
-    }
-    if (
-      wordIdInRange(props.wordId, wordsSelection.start_id, wordsSelection.end_id) &&
-      !wordList.value.map((w) => w.word_id).includes(props.wordId)
-    ) {
-      wordList.value.push({ word_id: props.wordId, word: props.word })
-    }
-  }
 }
 
 function mouseDown() {
@@ -73,19 +35,42 @@ function mouseDown() {
   if (!mouseKeyDown.value) {
     firstWordId.value = props.wordId
   }
-
   mouseKeyDown.value = true
+}
+
+function mouseMove() {
+  if (!mouseKeyDown.value) {
+    return
+  }
+  if (wordsSelection.start_id == '') {
+    wordsSelection.start_id = props.wordId
+    wordsSelection.end_id = props.wordId
+    wordsSelection.last_id = props.wordId
+    return
+  }
+  if (
+    compareWordIds(props.wordId, wordsSelection.start_id) > 0 ||
+    compareWordIds(props.wordId, firstWordId.value) == 0
+  ) {
+    wordsSelection.end_id = props.wordId
+    wordsSelection.last_id = props.wordId
+  } else if (compareWordIds(props.wordId, wordsSelection.start_id) < 0) {
+    wordsSelection.start_id = props.wordId
+  }
+  if (
+    wordIdInRange(props.wordId, wordsSelection.start_id, wordsSelection.end_id) &&
+    !wordList.value.map((w) => w.word_id).includes(props.wordId)
+  ) {
+    wordList.value.push({ word_id: props.wordId, word: props.word })
+  }
 }
 </script>
 
 <template>
-  <!--  TODO remove data-attribute using -->
   <n-text
     class="word_text"
     :class="[wordStatusClass, { 'bg-yellow-400': isSelected }]"
     :id="wordId"
-    :data-is-word="word.isWord"
-    :data-word-tokens="word.wordTokens"
     @click="updateWordState"
     @mousemove="mouseMove"
     @mousedown="mouseDown"
