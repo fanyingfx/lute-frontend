@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import type { WordToken } from '@/Interface'
-import { firstWordId, mouseKeyDown, wordList, wordsSelection, wordState } from '@/store'
-import { compareWordIds, wordIdInRange } from '@/utils/TextUtils'
+import {
+  compareWordIds,
+  firstWordId,
+  mouseKeyDown,
+  resetWordsSelection,
+  wordIdInRange,
+  wordList,
+  wordsSelection,
+  wordState
+} from '@/components/reading/wordsSelectionApis'
 
 let props = defineProps<{
   word: WordToken
@@ -33,6 +41,7 @@ function updateWordState() {
 function mouseDown() {
   // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
+    resetWordsSelection()
     firstWordId.value = props.wordId
   }
   mouseKeyDown.value = true

@@ -10,6 +10,7 @@ import {
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
 import { bookPageData as pagedData, updateBookPageData } from '@/store'
+import { wordSelectEnd } from '@/components/reading/wordsSelectionApis'
 
 const currentPage = ref(1)
 
@@ -58,7 +59,13 @@ provide('wordToken', currentWordToken)
       <RouterLink to="/home"> <n-icon :component="Home" />Home </RouterLink>
     </n-breadcrumb-item>
   </n-breadcrumb>
-  <n-split direction="horizontal" class="min-h-screen" :max="0.75" :min="0.25">
+  <n-split
+    direction="horizontal"
+    @mouseup="wordSelectEnd"
+    class="min-h-screen"
+    :max="0.75"
+    :min="0.25"
+  >
     <template #1>
       <n-flex class="border border-sky-500" vertical id="left_pane" style="height: 100%">
         <n-flex

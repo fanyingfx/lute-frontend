@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { currentLanguageId, resetWordsSelection, updateBookPageData, wordState } from '@/store'
+import { currentLanguageId, updateBookPageData } from '@/store'
 import KyService from '@/api/config'
 import { Endpoint } from '@/api'
 import type { WordToken } from '@/Interface'
+import { resetWordsSelection, wordState } from '@/components/reading/wordsSelectionApis'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)

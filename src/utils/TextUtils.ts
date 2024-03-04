@@ -104,22 +104,3 @@ export function bookDatapaginate(
 
   return tempAllData
 }
-
-export function compareWordIds(wordId1: string, wordId2: string): number {
-  const w1 = wordId1.replace('para', '').replace('sent', '')
-  const w2 = wordId2.replace('para', '').replace('sent', '')
-  const w1Arr = w1.split('_').map(Number)
-  const w2Arr = w2.split('_').map(Number)
-
-  for (let i = 0; i < w1.length; i++) {
-    if (w1Arr[i] == w2Arr[i]) {
-      continue
-    }
-    return w1Arr[i] > w2Arr[i] ? 1 : -1
-  }
-  return 0
-}
-
-export function wordIdInRange(curr_word_id: string, start_id: string, end_id: string): boolean {
-  return compareWordIds(curr_word_id, start_id) >= 0 && compareWordIds(curr_word_id, end_id) <= 0
-}
