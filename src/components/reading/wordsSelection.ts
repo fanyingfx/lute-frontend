@@ -18,11 +18,9 @@ export function resetWordsSelection() {
   wordsSelection.last_id = ''
 }
 
-export const wordState = ref<WordToken | null>(null)
+export const selectedWord = ref<WordToken | null>(null)
 export const wordList = ref<{ word_id: string; word: WordToken }[]>([])
 
-export const selectedWords = ref<string[]>([])
-export const lastSelectedWordId = ref('')
 export const firstWordId = ref<string>('')
 
 function getSmallWordId(wordId1: string, wordId2: string) {
@@ -52,7 +50,7 @@ export function updateWordsSelection() {
   if (selectedWordList.length == 0) {
     throw new Error('no words in range')
   } else if (selectedWordList.length == 1) {
-    wordState.value = selectedWordList[0].word
+    selectedWord.value = selectedWordList[0].word
   } else {
     let wordString = ''
     const wordTokens: string[] = []
@@ -71,7 +69,7 @@ export function updateWordsSelection() {
       lastWord = word
     }
 
-    wordState.value = {
+    selectedWord.value = {
       wordString: wordString.trim(),
       wordPos: 'MULTI',
       wordLemma: wordLemma.trim(),

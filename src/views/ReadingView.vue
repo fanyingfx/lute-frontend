@@ -10,7 +10,7 @@ import {
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
 import { bookPageData as pagedData, updateBookPageData } from '@/store'
-import { wordSelectEnd } from '@/components/reading/wordsSelectionApis'
+import { wordSelectEnd } from '@/components/reading/wordsSelection'
 
 const currentPage = ref(1)
 
@@ -61,8 +61,8 @@ provide('wordToken', currentWordToken)
   </n-breadcrumb>
   <n-split
     direction="horizontal"
-    @mouseup="wordSelectEnd"
     class="min-h-screen"
+    @mouseup="wordSelectEnd"
     :max="0.75"
     :min="0.25"
   >

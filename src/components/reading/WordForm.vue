@@ -4,7 +4,11 @@ import { currentLanguageId, updateBookPageData } from '@/store'
 import KyService from '@/api/config'
 import { Endpoint } from '@/api'
 import type { WordToken } from '@/Interface'
-import { resetWordsSelection, wordState } from '@/components/reading/wordsSelectionApis'
+import {
+  mouseKeyDown,
+  resetWordsSelection,
+  selectedWord
+} from '@/components/reading/wordsSelection'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
@@ -24,31 +28,31 @@ interface IWordModel {
 }
 
 const wordModel = reactive<IWordModel>({
-  wordString: wordState.value?.wordString.trim() ?? '',
+  wordString: selectedWord.value?.wordString.trim() ?? '',
   wordLemma: '',
   wordPos: 'n',
   wordExplanation: '',
   wordStatus: 1,
   wordPronunciation: '',
   wordTokens: [''],
-  nextIsWs: wordState.value?.nextIsWs ?? false,
+  nextIsWs: selectedWord.value?.nextIsWs ?? false,
   wordCounts: 1,
   languageId: currentLanguageId.value,
   wordDbId: -1
 })
 
-watch(wordState, () => {
-  if (wordState.value !== null) {
-    wordModel.wordString = wordState.value.wordString
-    wordModel.wordExplanation = wordState.value.wordExplanation ?? ''
-    wordModel.wordStatus = wordState.value.wordStatus
-    wordModel.wordPos = wordState.value.wordPos ?? ''
-    wordModel.wordTokens = wordState.value.wordTokens!
-    wordModel.wordLemma = wordState.value.wordLemma
-    wordModel.wordCounts = wordState.value.wordTokens.length
-    wordModel.wordDbId = wordState.value.wordDbId
+watch(selectedWord, () => {
+  if (selectedWord.value !== null) {
+    wordModel.wordString = selectedWord.value.wordString
+    wordModel.wordExplanation = selectedWord.value.wordExplanation ?? ''
+    wordModel.wordStatus = selectedWord.value.wordStatus
+    wordModel.wordPos = selectedWord.value.wordPos ?? ''
+    wordModel.wordTokens = selectedWord.value.wordTokens!
+    wordModel.wordLemma = selectedWord.value.wordLemma
+    wordModel.wordCounts = selectedWord.value.wordTokens.length
+    wordModel.wordDbId = selectedWord.value.wordDbId
     wordModel.languageId = currentLanguageId.value
-    wordModel.nextIsWs = wordState.value.nextIsWs
+    wordModel.nextIsWs = selectedWord.value.nextIsWs
   }
 })
 
@@ -87,7 +91,7 @@ async function onDelete() {
 </script>
 
 <template>
-  <template v-if="wordState !== null">
+  <template v-if="selectedWord !== null">
     <n-form
       ref="formRef"
       :model="wordModel"

@@ -4,12 +4,10 @@ import {
   compareWordIds,
   firstWordId,
   mouseKeyDown,
-  resetWordsSelection,
   wordIdInRange,
   wordList,
-  wordsSelection,
-  wordState
-} from '@/components/reading/wordsSelectionApis'
+  wordsSelection
+} from '@/components/reading/wordsSelection'
 
 let props = defineProps<{
   word: WordToken
@@ -35,14 +33,19 @@ const isSelected = computed(() =>
 function updateWordState() {
   const currWord = { ...props.word }
   currWord.wordStatus = currWord.wordStatus > 0 ? currWord.wordStatus : 1
-  wordState.value = currWord
+  // wordState.value = currWord
 }
-
+// using to record the first word
+const wordClicked = ref(false)
 function mouseDown() {
   // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
-    resetWordsSelection()
+    // resetWordsSelection()
+    wordClicked.value = true
     firstWordId.value = props.wordId
+    wordsSelection.start_id = props.wordId
+    wordsSelection.end_id = props.wordId
+    wordsSelection.last_id = props.wordId
   }
   mouseKeyDown.value = true
 }
@@ -51,16 +54,18 @@ function mouseMove() {
   if (!mouseKeyDown.value) {
     return
   }
-  if (wordsSelection.start_id == '') {
-    wordsSelection.start_id = props.wordId
-    wordsSelection.end_id = props.wordId
-    wordsSelection.last_id = props.wordId
+  if (wordClicked.value) {
+    // when mouseMove reset current wordClicked to false
+    wordClicked.value = false
+    console.log('wordClicked', wordClicked.value)
     return
   }
+  console.log('current word', props.wordId, props.word.wordString)
   if (
     compareWordIds(props.wordId, wordsSelection.start_id) > 0 ||
     compareWordIds(props.wordId, firstWordId.value) == 0
   ) {
+    console.log('current selection', wordsSelection)
     wordsSelection.end_id = props.wordId
     wordsSelection.last_id = props.wordId
   } else if (compareWordIds(props.wordId, wordsSelection.start_id) < 0) {
@@ -71,6 +76,7 @@ function mouseMove() {
     !wordList.value.map((w) => w.word_id).includes(props.wordId)
   ) {
     wordList.value.push({ word_id: props.wordId, word: props.word })
+    console.log(wordList)
   }
 }
 </script>
