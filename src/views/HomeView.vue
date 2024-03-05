@@ -29,7 +29,7 @@ watchEffect(async () => {
       bookName: bookItem.bookName,
       languageName: bookItem.language.languageName,
       bookId: bookItem.id,
-      children: bookItem.texts.map(bookText=>{
+      children: bookItem.texts.map((bookText) => {
         return {
           bookName: `${bookText.id}-${bookText.title}`,
           languageName: bookItem.language.languageName,
@@ -40,7 +40,6 @@ watchEffect(async () => {
   })
   console.log(booklist)
 })
-
 </script>
 
 <template>

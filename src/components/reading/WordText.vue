@@ -33,14 +33,14 @@ const isSelected = computed(() =>
 
 function onWordClick() {
   const currWord = { ...props.word }
-  console.log('wordClicked',currWord)
+  console.log('wordClicked', currWord)
   currWord.wordStatus = currWord.wordStatus > 0 ? currWord.wordStatus : 1
   wordClicked.value = true
   firstWordId.value = props.wordId
   wordsSelection.start_id = props.wordId
   wordsSelection.end_id = props.wordId
   wordsSelection.last_id = props.wordId
-  selectedWord.value=currWord
+  selectedWord.value = currWord
 }
 // using to record the first word
 const wordClicked = ref(false)
@@ -49,7 +49,6 @@ function mouseDown() {
   if (!mouseKeyDown.value) {
     onWordClick()
     // resetWordsSelection()
-
   }
   mouseKeyDown.value = true
 }

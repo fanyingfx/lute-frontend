@@ -25,6 +25,6 @@ export async function updateBookPageData(bookId: string = '1') {
   //   searchParams: { booktext_id: bookId }
   // }).json<BookTextResponse>()
   //
-  const data = await  getBooktext(bookId)
+  const data = await getBooktext(bookId)
   bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
 }

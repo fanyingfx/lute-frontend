@@ -20,7 +20,7 @@ const currentPageData = computed(() => {
 })
 const readingPanelRef = ref(null)
 const totalPages = computed(() => Math.ceil(pagedData.value.length))
-onMounted(()=>{
+onMounted(() => {
   console.log('ReadingView onMounted ')
 })
 onUnmounted(() => {
