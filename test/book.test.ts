@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { bookDatapaginate } from '../src/utils/TextUtils'
 import response  from './bookdata.json'
-import { TSegment } from '../src/Interface'
+import { TSegment } from '../src/api/Interface'
 
 describe('bookDatapaginate', () => {
   const bookData: TSegment[] = response.data

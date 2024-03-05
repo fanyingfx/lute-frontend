@@ -1,4 +1,4 @@
-import type { ParsedTextSegment, TextParagraphSegment, TSegment } from '@/Interface'
+import type { ParsedTextSegment, TextParagraphSegment, TSegment } from '@/api/Interface'
 
 function combineSentenceToParagraph(segments: ParsedTextSegment[]): TSegment[] {
   const segmentArray = [] as TSegment[]

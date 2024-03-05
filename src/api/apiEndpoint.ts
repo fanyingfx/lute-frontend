@@ -3,7 +3,7 @@ export const Endpoint = {
   book: {
     onebook: 'book/one',
     allbook: 'book/list',
-    test_parser: 'booktext/test_parser'
+    booktext: 'book/booktext'
   },
   word: {
     create_or_update: 'word/create_or_update',

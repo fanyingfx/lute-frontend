@@ -2,8 +2,8 @@
 import type { FormInst } from 'naive-ui'
 import { currentLanguageId, updateBookPageData } from '@/store'
 import KyService from '@/api/config'
-import { Endpoint } from '@/api'
-import type { WordToken } from '@/Interface'
+import { Endpoint } from '@/api/apiEndpoint'
+import type { WordToken } from '@/api/Interface'
 import {
   mouseKeyDown,
   resetWordsSelection,

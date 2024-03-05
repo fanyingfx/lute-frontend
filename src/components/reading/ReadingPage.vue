@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TSegment } from '@/Interface'
+import type { TSegment } from '@/api/Interface'
 import TextParagraph from '@/components/reading/TextParagraph.vue'
 
 defineProps<{

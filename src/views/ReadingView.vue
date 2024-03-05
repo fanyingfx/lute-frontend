@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue'
 import { NButton, NText } from 'naive-ui'
-import type { WordToken } from '@/Interface'
+import type { WordToken } from '@/api/Interface'
 import TextReadingComponent from '@/components/reading/ReadingPage.vue'
 import {
   ChevronBackSharp as BackSharp,
@@ -10,7 +10,8 @@ import {
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
 import { bookPageData as pagedData, updateBookPageData } from '@/store'
-import { wordSelectEnd } from '@/components/reading/wordsSelection'
+import { resetWordsSelection, wordSelectEnd } from '@/components/reading/wordsSelection'
+import { useRoute } from 'vue-router'
 
 const currentPage = ref(1)
 
@@ -18,14 +19,15 @@ const currentPageData = computed(() => {
   return pagedData.value[currentPage.value - 1]
 })
 const readingPanelRef = ref(null)
-// const pagedData = ref<TSegment[][]>([[{
-//   'segment_type': 'softlinebreak',
-//   segment_value: '',
-//   segment_raw: '',
-//   segment_order: 0
-// }]])
 const totalPages = computed(() => Math.ceil(pagedData.value.length))
+onMounted(()=>{
+  console.log('ReadingView onMounted ')
+})
+onUnmounted(() => {
+  console.log('ReadingView onUnMounted')
 
+  resetWordsSelection()
+})
 const nextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++
@@ -39,15 +41,9 @@ const prevPage = () => {
   }
   console.log(currentPage.value, currentPageData.value)
 }
-// watch(bookPageData, async ()=>{
-//   console.log('bookPageDataChanged',bookPageData)
-//   pagedData.value=bookPageData.value
-// })
-
+const route = useRoute()
 watchEffect(async () => {
-  // const {data} = await axios.get<ServerResponse>(Endpoint.book.test_parser, { params: { booktext_id: 1 } })
-  // pagedData.value=bookDatapaginate(data.data, wordsPerPage.value)
-  await updateBookPageData()
+  await updateBookPageData(route.params.bookId as string)
 })
 
 const currentWordToken = ref<WordToken | null>(null)
@@ -56,7 +52,10 @@ provide('wordToken', currentWordToken)
 <template>
   <n-breadcrumb>
     <n-breadcrumb-item>
-      <RouterLink to="/home"> <n-icon :component="Home" />Home </RouterLink>
+      <RouterLink to="/home">
+        <n-icon :component="Home" />
+        Home
+      </RouterLink>
     </n-breadcrumb-item>
   </n-breadcrumb>
   <n-split

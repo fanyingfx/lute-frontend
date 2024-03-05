@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import WordItem from '@/components/reading/WordItem.vue'
-import { type ParsedTextSegment } from '@/Interface'
+import { type ParsedTextSegment } from '@/api/Interface'
 
 const props = defineProps<{
   sentenceSegment: ParsedTextSegment

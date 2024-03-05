@@ -1,4 +1,4 @@
-import type { WordToken } from '@/Interface'
+import type { WordToken } from '@/api/Interface'
 
 interface TextSelection {
   start_id: string

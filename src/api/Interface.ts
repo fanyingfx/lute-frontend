@@ -33,6 +33,27 @@ export interface TextParagraphSegment {
   paragraphOrder: number
 }
 
-export interface ServerResponse {
+interface BookText {
+  title: string,
+  id: number
+}
+
+export interface BookItem {
+  id: number
+  bookName: string
+  language: Language
+  texts: BookText[]
+}
+export interface BookList {
+  items: BookItem[]
+}
+interface Language {
+  languageName: 'English' | 'Japanese'
+  parserName: 'english' | 'japanese'
+  RTL: boolean
+  id: number
+}
+
+export interface BookTextResponse {
   data: ParsedTextSegment[]
 }

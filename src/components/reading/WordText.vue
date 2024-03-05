@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { WordToken } from '@/Interface'
+import type { WordToken } from '@/api/Interface'
 import {
   compareWordIds,
   firstWordId,
   mouseKeyDown,
   wordIdInRange,
   wordList,
-  wordsSelection
+  wordsSelection,
+  selectedWord
 } from '@/components/reading/wordsSelection'
 
 let props = defineProps<{
@@ -30,22 +31,25 @@ const isSelected = computed(() =>
   wordIdInRange(props.wordId, wordsSelection.start_id, wordsSelection.end_id)
 )
 
-function updateWordState() {
+function onWordClick() {
   const currWord = { ...props.word }
+  console.log('wordClicked',currWord)
   currWord.wordStatus = currWord.wordStatus > 0 ? currWord.wordStatus : 1
-  // wordState.value = currWord
+  wordClicked.value = true
+  firstWordId.value = props.wordId
+  wordsSelection.start_id = props.wordId
+  wordsSelection.end_id = props.wordId
+  wordsSelection.last_id = props.wordId
+  selectedWord.value=currWord
 }
 // using to record the first word
 const wordClicked = ref(false)
 function mouseDown() {
   // save first wordId to detect mousemove direction
   if (!mouseKeyDown.value) {
+    onWordClick()
     // resetWordsSelection()
-    wordClicked.value = true
-    firstWordId.value = props.wordId
-    wordsSelection.start_id = props.wordId
-    wordsSelection.end_id = props.wordId
-    wordsSelection.last_id = props.wordId
+
   }
   mouseKeyDown.value = true
 }
@@ -86,7 +90,6 @@ function mouseMove() {
     class="word_text"
     :class="[wordStatusClass, { 'bg-yellow-400': isSelected }]"
     :id="wordId"
-    @click="updateWordState"
     @mousemove="mouseMove"
     @mousedown="mouseDown"
   >

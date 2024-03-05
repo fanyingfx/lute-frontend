@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type WordToken } from '@/Interface'
+import { type WordToken } from '@/api/Interface'
 import WordText from '@/components/reading/WordText.vue'
 
 const props = defineProps<{

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TextParagraphSegment } from '@/Interface'
+import type { TextParagraphSegment } from '@/api/Interface'
 
 import SentenceItem from '@/components/reading/SentenceItem.vue'
 
