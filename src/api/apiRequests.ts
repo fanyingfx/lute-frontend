@@ -6,6 +6,7 @@ export async function getBooklist() {
   const { items } = await KyService.get(Endpoint.book.allbook).json<BookList>()
   return items
 }
+
 export async function getBooktext(bookId: string) {
   const { data } = await KyService.get(
     `${Endpoint.book.booktext}/${bookId}`

@@ -1,9 +1,7 @@
 // import {reactive,} from 'vue'
-import type { BookTextResponse, TSegment, WordToken } from '@/api/Interface'
-import { Endpoint } from '@/api/apiEndpoint'
+import type { TSegment } from '@/api/Interface'
 import { ref } from 'vue'
 import { bookDatapaginate } from '@/utils/TextUtils'
-import KyService from '@/api/config'
 import { getBooktext } from '@/api/apiRequests'
 
 export const wordsPerPage = ref(250)

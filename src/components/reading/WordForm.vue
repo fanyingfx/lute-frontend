@@ -4,11 +4,7 @@ import { currentLanguageId, updateBookPageData } from '@/store'
 import KyService from '@/api/config'
 import { Endpoint } from '@/api/apiEndpoint'
 import type { WordToken } from '@/api/Interface'
-import {
-  mouseKeyDown,
-  resetWordsSelection,
-  selectedWord
-} from '@/components/reading/wordsSelection'
+import { resetWordsSelection, selectedWord } from '@/components/reading/wordsSelection'
 
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)

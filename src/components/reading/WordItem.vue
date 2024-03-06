@@ -2,7 +2,8 @@
 import { type WordToken } from '@/api/Interface'
 import WordText from '@/components/reading/WordText.vue'
 
-const props = defineProps<{
+// const props =
+defineProps<{
   word: WordToken
   wordId: string
 }>()

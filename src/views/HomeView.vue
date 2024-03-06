@@ -1,5 +1,6 @@
 <script setup lang="tsx">
 import { getBooklist } from '@/api/apiRequests'
+
 interface Book {
   languageName: string
   bookId: number
@@ -43,6 +44,9 @@ watchEffect(async () => {
 </script>
 
 <template>
+  <n-breadcrumb>
+    <n-breadcrumb-item id="home">Home </n-breadcrumb-item>
+  </n-breadcrumb>
   <n-data-table :columns="columns" :data="data" :bordered="false" />
 </template>
 
