@@ -6,6 +6,7 @@ import { Endpoint } from '@/api/apiEndpoint'
 import type { WordToken } from '@/api/Interface'
 import { resetWordsSelection, selectedWord } from '@/components/reading/wordsSelection'
 
+import { useRoute } from 'vue-router'
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
 
@@ -23,6 +24,9 @@ interface IWordModel {
   wordDbId?: number
 }
 
+const route = useRoute()
+console.log('route', route.query)
+currentLanguageId.value = Number(route.query.languageId as string)
 const wordModel = reactive<IWordModel>({
   wordString: selectedWord.value?.wordString.trim() ?? '',
   wordLemma: '',
@@ -51,7 +55,6 @@ watch(selectedWord, () => {
     wordModel.nextIsWs = selectedWord.value.nextIsWs
   }
 })
-
 async function onFormSubmit() {
   try {
     // delete wordModel['wordDbId']
@@ -66,7 +69,8 @@ async function onFormSubmit() {
   } catch (e) {
     console.log(e)
   }
-  await updateBookPageData()
+
+  await updateBookPageData(route.params.bookId as string)
   resetWordsSelection()
 }
 
@@ -79,7 +83,7 @@ async function onDelete() {
     console.log(e)
   }
 
-  await updateBookPageData()
+  await updateBookPageData(route.params.bookId as string)
   wordModel.wordStatus = 1
   wordModel.wordDbId = -1
   resetWordsSelection()

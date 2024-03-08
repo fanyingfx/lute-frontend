@@ -15,7 +15,8 @@
             "Curiouser"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         },
         {
           "wordString": "and",
@@ -30,7 +31,8 @@
             "and"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         },
         {
           "wordString": "curiouser",
@@ -45,7 +47,8 @@
             "curiouser"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         },
         {
           "wordString": "!",
@@ -60,7 +63,8 @@
             "!"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         }
       ],
       "segmentValue": "",
@@ -84,7 +88,8 @@
             "Help"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         },
         {
           "wordString": "!",
@@ -99,7 +104,8 @@
             "!"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         }
       ],
       "segmentValue": "",
@@ -123,7 +129,8 @@
             "Help"
           ],
           "wordPronunciation": "",
-          "wordExplanation": ""
+          "wordExplanation": "",
+          "wordDbId": -1
         }
       ],
       "segmentValue": "",

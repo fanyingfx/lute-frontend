@@ -40,6 +40,7 @@ function onWordClick() {
   wordsSelection.start_id = props.wordId
   wordsSelection.end_id = props.wordId
   wordsSelection.last_id = props.wordId
+  // when click set current word to selected
   selectedWord.value = currWord
 }
 // using to record the first word

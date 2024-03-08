@@ -18,6 +18,7 @@ export function resetWordsSelection() {
   wordsSelection.last_id = ''
 }
 
+// it is used to record the word when click or after mouse up
 export const selectedWord = ref<WordToken | null>(null)
 export const wordList = ref<{ word_id: string; word: WordToken }[]>([])
 

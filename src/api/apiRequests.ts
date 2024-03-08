@@ -4,6 +4,7 @@ import type { BookList, BookTextResponse } from '@/api/Interface'
 
 export async function getBooklist() {
   const { items } = await KyService.get(Endpoint.book.allbook).json<BookList>()
+  console.log('items', items)
   return items
 }
 
