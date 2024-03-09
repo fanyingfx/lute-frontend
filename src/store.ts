@@ -20,5 +20,6 @@ export const currentLanguageId = ref(1)
 
 export async function updateBookPageData(bookId: string = '1') {
   const data = await getBooktext(bookId)
+  console.log('bookData', data)
   bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
 }

@@ -20,12 +20,12 @@ describe('WordItem', () => {
         wordPos: 'VERB',
         isMultipleWords: false,
         isWord: true,
-        isEos: true,
         nextIsWs: false,
         wordStatus: 1,
         wordTokens: ['help'],
         wordPronunciation: '',
         wordExplanation: 'This is a help',
+        wordImageSrc:'',
         wordDbId: -1
       },
       wordId: wordId

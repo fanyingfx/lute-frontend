@@ -14,9 +14,13 @@ defineProps<{
     <template #trigger>
       <WordText :word-id="wordId" :word="word" />
     </template>
-    <n-card :id="`popcard_${wordId}`" :title="word.wordString">
+    <n-el type="div" :id="`popcard_${wordId}`">
+      <n-text strong>{{ word.wordString }}</n-text
+      ><br />
+      <n-text class="text-xs">{{ word.wordPronunciation }}</n-text
+      ><br />
       <n-text>{{ word.wordExplanation }}</n-text>
-    </n-card>
+    </n-el>
   </n-popover>
   <WordText :word-id="wordId" :word="word" v-else />
 </template>

@@ -14,3 +14,16 @@ export async function getBooktext(bookId: string) {
   ).json<BookTextResponse>()
   return data
 }
+
+export async function uploadWordImage(
+  file: File,
+  params: { save_local: boolean; image_name: string; word_id: number }
+) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const response = await KyService.post(Endpoint.word.upload_word_image, {
+    body: formData,
+    searchParams: params
+  })
+  return response.status
+}

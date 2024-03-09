@@ -55,12 +55,14 @@ export function updateWordsSelection() {
   } else {
     let wordString = ''
     const wordTokens: string[] = []
+    const wordPronunciation: string[] = []
     let wordLemma = ''
     let lastWord = selectedWordList[0].word
 
     for (const { word } of selectedWordList) {
       wordString += word.wordString
       wordTokens.push(...word.wordTokens)
+      if (word.wordPronunciation !== '') wordPronunciation.push(word.wordPronunciation)
 
       wordLemma += word.wordLemma
       if (word.nextIsWs) {
@@ -74,6 +76,7 @@ export function updateWordsSelection() {
       wordString: wordString.trim(),
       wordPos: 'MULTI',
       wordLemma: wordLemma.trim(),
+      wordPronunciation: wordPronunciation.join('・'),
       isMultipleWords: true,
       wordStatus: 1,
       wordTokens: wordTokens,
@@ -88,6 +91,7 @@ export function wordSelectEnd() {
     updateWordsSelection()
   }
 }
+
 export function compareWordIds(wordId1: string, wordId2: string): number {
   const w1 = wordId1.replace('para', '').replace('sent', '')
   const w2 = wordId2.replace('para', '').replace('sent', '')

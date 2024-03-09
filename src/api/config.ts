@@ -5,8 +5,8 @@ console.log('url', import.meta.env.VITE_API_URL)
 
 const KyService = ky.create({
   prefixUrl: import.meta.env.VITE_API_URL,
-  timeout: 1000,
-  headers: { 'Content-Type': 'application/json;charset=utf-8' }
+  timeout: 2000
+  // headers: { 'Content-Type': 'application/json;charset=utf-8' }
 })
 
 export default KyService

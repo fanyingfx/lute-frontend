@@ -6,13 +6,13 @@ export interface WordToken {
   wordPos?: string
   isMultipleWords: boolean
   isWord: boolean
-  isEos: boolean
   nextIsWs: boolean
   wordStatus: number
   wordExplanation?: string
-  wordPronunciation?: string
+  wordPronunciation: string
   wordTokens: string[]
   wordDbId: number
+  wordImageSrc: string | null
 }
 
 export interface ParsedTextSegment {

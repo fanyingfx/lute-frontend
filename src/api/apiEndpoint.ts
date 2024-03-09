@@ -7,6 +7,7 @@ export const Endpoint = {
   },
   word: {
     create_or_update: 'word/create_or_update',
-    delete: 'word/delete'
+    delete: 'word/delete',
+    upload_word_image: 'word/upload_word_image'
   }
 }

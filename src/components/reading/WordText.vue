@@ -93,7 +93,10 @@ function mouseMove() {
     @mousemove="mouseMove"
     @mousedown="mouseDown"
   >
-    {{ word.wordString }}{{ word.nextIsWs ? '&nbsp;' : '' }}
+    <ruby
+      >{{ word.wordString
+      }}<rt v-if="word.wordPronunciation != ''">{{ word.wordPronunciation }}</rt></ruby
+    >{{ word.nextIsWs ? '&nbsp;' : '' }}
   </n-text>
 </template>
 
