@@ -29,11 +29,11 @@ export async function uploadWordImage(
   return response.status
 }
 export async function updateWordIndex(languageId: number, firstWord: string) {
-  const response = await KyService.post(Endpoint.word.updateWordIndex, {
+  await KyService.post(Endpoint.word.updateWordIndex, {
     searchParams: {
       language_id: languageId,
       first_word: firstWord
     }
   })
-  return response
+  // return response
 }

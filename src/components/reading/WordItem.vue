@@ -26,8 +26,4 @@ defineProps<{
 </template>
 
 <style scoped>
-.word_text {
-  font-size: 1.2rem;
-  margin-bottom: 9.5px;
-}
 </style>

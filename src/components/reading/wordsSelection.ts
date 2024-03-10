@@ -1,5 +1,4 @@
 import type { WordToken } from '@/api/Interface'
-import { wordImagePrefixUrl } from '@/api/apiEndpoint'
 
 interface TextSelection {
   start_id: string
