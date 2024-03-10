@@ -17,13 +17,23 @@ export async function getBooktext(bookId: string) {
 
 export async function uploadWordImage(
   file: File,
-  params: { save_local: boolean; image_name: string; word_id: number }
+  params: { save_local: boolean; word_image_name: string; word_id: number }
 ) {
   const formData = new FormData()
   formData.append('file', file)
-  const response = await KyService.post(Endpoint.word.upload_word_image, {
+  // formData.append('my_test','my_test_value')
+  const response = await KyService.post(Endpoint.word.uploadWordImage, {
     body: formData,
     searchParams: params
   })
   return response.status
+}
+export async function updateWordIndex(languageId: number, firstWord: string) {
+  const response = await KyService.post(Endpoint.word.updateWordIndex, {
+    searchParams: {
+      language_id: languageId,
+      first_word: firstWord
+    }
+  })
+  return response
 }

@@ -25,7 +25,7 @@ describe('WordItem', () => {
         wordTokens: ['help'],
         wordPronunciation: '',
         wordExplanation: 'This is a help',
-        wordImageSrc:'',
+        wordImageSrc: '',
         wordDbId: -1
       },
       wordId: wordId

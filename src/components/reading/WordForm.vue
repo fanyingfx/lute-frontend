@@ -2,8 +2,8 @@
 import type { FormInst } from 'naive-ui'
 import { currentLanguageId, updateBookPageData } from '@/store'
 import KyService from '@/api/config'
-import { uploadWordImage } from '@/api/apiRequests'
-import { Endpoint } from '@/api/apiEndpoint'
+import { updateWordIndex, uploadWordImage } from '@/api/apiRequests'
+import { Endpoint, wordImagePrefixUrl } from '@/api/apiEndpoint'
 import type { WordToken } from '@/api/Interface'
 import { resetWordsSelection, selectedWord } from '@/components/reading/wordsSelection'
 import type { UploadFileInfo } from 'naive-ui'
@@ -12,17 +12,6 @@ import { useRoute } from 'vue-router'
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
 const imageRef = ref<UploadFileInfo[]>([])
-
-// function handleUploadChange(data: { fileList: UploadFileInfo[] }) {
-//   imageRef.value = data.fileList
-//   // let file=data.fileList[0].file!
-// }
-
-// function onUploadFinish({ file }: { file: UploadFileInfo }) {
-//   const ext = file.name.split('.')[1]
-//   file.name = `${selectedWord.value?.wordString}.${ext}`
-//   return file
-// }
 
 interface IWordModel {
   wordString: string
@@ -62,57 +51,50 @@ const wordModel = reactive<IWordModel>({
 })
 
 watch(selectedWord, () => {
-  if (selectedWord.value !== null) {
-    wordModel.wordString = selectedWord.value.wordString
-    wordModel.wordExplanation = selectedWord.value.wordExplanation ?? ''
-    wordModel.wordStatus = selectedWord.value.wordStatus
-    wordModel.wordPos = selectedWord.value.wordPos ?? ''
-    wordModel.wordTokens = selectedWord.value.wordTokens!
-    wordModel.wordLemma = selectedWord.value.wordLemma
-    wordModel.wordPronunciation = selectedWord.value.wordPronunciation!
-    wordModel.wordCounts = selectedWord.value.wordTokens.length
-    wordModel.wordDbId = selectedWord.value.wordDbId
-    wordModel.languageId = currentLanguageId.value
-    wordModel.nextIsWs = selectedWord.value.nextIsWs
-    wordModel.wordImageSrc = selectedWord.value.wordImageSrc
-    if (selectedWord.value.wordImageSrc) {
-      imageRef.value = [
-        {
-          id: 'a',
-          name: selectedWord.value.wordImageSrc,
-          status: 'finished',
-          url: `/api/word_images/${selectedWord.value.wordImageSrc}`
-        }
-      ]
-    }
+  Object.assign(wordModel, selectedWord.value)
+  wordModel.languageId = currentLanguageId.value
+  wordModel.wordCounts = selectedWord.value!.wordTokens.length
+  if (selectedWord.value!.wordImageSrc) {
+    imageRef.value = [
+      {
+        id: 'a',
+        name: selectedWord.value!.wordImageSrc,
+        status: 'finished',
+        url: `${wordImagePrefixUrl}/${selectedWord.value!.wordImageSrc}`
+      }
+    ]
+  } else {
+    imageRef.value = []
   }
 })
 
 async function onFormSubmit() {
   try {
-    // delete wordModel['wordDbId']
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { wordDbId: _, wordImageSrc: __, ...req } = wordModel
     console.log('req', wordModel)
-    const wordToken = await KyService.post(Endpoint.word.create_or_update, {
+    const wordToken = await KyService.post(Endpoint.word.createOrUpdate, {
       json: req
     }).json<WordToken>()
     wordModel.wordDbId = wordToken.wordDbId
-    if (imageRef.value.length > 0 && wordToken.wordDbId !== -1) {
+    if (imageRef.value.length > 0 && wordToken.wordDbId > 0) {
+      // if image exists, update word_image
       const file_ext = imageRef.value[0].name.split('.')[1]
       const params = {
         save_local: true,
-        image_name: `${wordToken.wordString}.${file_ext}`,
+        word_image_name: `${wordToken.wordString}.${file_ext}`,
         word_id: wordToken.wordDbId!
       }
-      await uploadWordImage(imageRef.value[0].file!, params)
-      wordModel.wordImageSrc = params.image_name
+      // check if file uploaded
+      if ('file' in imageRef.value[0]) {
+        await uploadWordImage(imageRef.value[0].file!, params)
+      }
+      wordModel.wordImageSrc = params.word_image_name
     }
-
-    // console.log('res', resData)
   } catch (e) {
     console.log(e)
   }
+  await updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
 
   await updateBookPageData(route.params.bookId as string)
   resetWordsSelection()

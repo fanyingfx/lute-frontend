@@ -6,8 +6,10 @@ export const Endpoint = {
     booktext: 'book/booktext'
   },
   word: {
-    create_or_update: 'word/create_or_update',
+    createOrUpdate: 'word/create_or_update',
     delete: 'word/delete',
-    upload_word_image: 'word/upload_word_image'
+    uploadWordImage: 'word/upload_word_image',
+    updateWordIndex: 'word/update_word_index'
   }
 }
+export const wordImagePrefixUrl = '/api/word_images'

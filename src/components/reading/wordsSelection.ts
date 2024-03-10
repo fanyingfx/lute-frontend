@@ -1,4 +1,5 @@
 import type { WordToken } from '@/api/Interface'
+import { wordImagePrefixUrl } from '@/api/apiEndpoint'
 
 interface TextSelection {
   start_id: string
@@ -79,6 +80,7 @@ export function updateWordsSelection() {
       wordPronunciation: wordPronunciation.join('・'),
       isMultipleWords: true,
       wordStatus: 1,
+      wordImageSrc: null,
       wordTokens: wordTokens,
       nextIsWs: lastWord.nextIsWs
     } as WordToken

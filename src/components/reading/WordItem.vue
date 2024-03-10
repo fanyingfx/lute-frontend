@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { type WordToken } from '@/api/Interface'
 import WordText from '@/components/reading/WordText.vue'
+import { wordImagePrefixUrl } from '@/api/apiEndpoint'
 
 // const props =
 defineProps<{
@@ -14,13 +15,12 @@ defineProps<{
     <template #trigger>
       <WordText :word-id="wordId" :word="word" />
     </template>
-    <n-el type="div" :id="`popcard_${wordId}`">
-      <n-text strong>{{ word.wordString }}</n-text
-      ><br />
-      <n-text class="text-xs">{{ word.wordPronunciation }}</n-text
-      ><br />
+    <n-flex :id="`popcard_${wordId}`" size="small" vertical>
+      <n-text strong>{{ word.wordString }}</n-text>
+      <n-image v-if="word.wordImageSrc" :src="wordImagePrefixUrl + '/' + word.wordImageSrc" />
+      <n-text class="text-xs">{{ word.wordPronunciation }}</n-text>
       <n-text>{{ word.wordExplanation }}</n-text>
-    </n-el>
+    </n-flex>
   </n-popover>
   <WordText :word-id="wordId" :word="word" v-else />
 </template>
