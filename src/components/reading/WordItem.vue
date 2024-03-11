@@ -25,5 +25,4 @@ defineProps<{
   <WordText :word-id="wordId" :word="word" v-else />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

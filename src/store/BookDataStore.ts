@@ -2,9 +2,9 @@
 import type { TSegment } from '@/api/Interface'
 import { ref } from 'vue'
 import { bookDatapaginate } from '@/utils/TextUtils'
-import { getBooktext } from '@/api/apiRequests'
+import api from '@/api/apiRequests'
+import { wordsPerPage } from '@/store/WordsSelectionStore'
 
-export const wordsPerPage = ref(250)
 export const bookPageData = ref<TSegment[][]>([
   [
     {
@@ -19,7 +19,7 @@ export const bookPageData = ref<TSegment[][]>([
 export const currentLanguageId = ref(1)
 
 export async function updateBookPageData(bookId: string = '1') {
-  const data = await getBooktext(bookId)
+  const data = await api.getBooktext(bookId)
   console.log('bookData', data)
   bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
 }

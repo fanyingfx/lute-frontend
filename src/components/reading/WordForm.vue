@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { currentLanguageId, updateBookPageData } from '@/store'
+import { currentLanguageId, updateBookPageData } from '@/store/BookDataStore'
 import KyService from '@/api/config'
-import { updateWordIndex, uploadWordImage } from '@/api/apiRequests'
+import api from '@/api/apiRequests'
 import { Endpoint, wordImagePrefixUrl } from '@/api/apiEndpoint'
 import type { WordToken } from '@/api/Interface'
-import { resetWordsSelection, selectedWord } from '@/components/reading/wordsSelection'
+import { resetWordsSelection, selectedWord, wordImages } from '@/store/WordsSelectionStore'
 import type { UploadFileInfo } from 'naive-ui'
 
 import { useRoute } from 'vue-router'
@@ -67,6 +67,12 @@ watch(selectedWord, () => {
     imageRef.value = []
   }
 })
+const loadingSearchImage = ref(false)
+async function onSearchImage() {
+  loadingSearchImage.value = true
+  wordImages.value = await api.getWordImages(wordModel.wordString)
+  loadingSearchImage.value = false
+}
 
 async function onFormSubmit() {
   try {
@@ -80,21 +86,23 @@ async function onFormSubmit() {
     if (imageRef.value.length > 0 && wordToken.wordDbId > 0) {
       // if image exists, update word_image
       const file_ext = imageRef.value[0].name.split('.')[1]
-      const params = {
-        save_local: true,
-        word_image_name: `${wordToken.wordString}.${file_ext}`,
-        word_id: wordToken.wordDbId!
-      }
+      const wordImageName = `${wordToken.wordString}.${file_ext}`
       // check if file uploaded
       if ('file' in imageRef.value[0]) {
-        await uploadWordImage(imageRef.value[0].file!, params)
+        const params = {
+          save_local: true,
+          word_image_name: wordImageName,
+          word_id: wordToken.wordDbId!,
+          word_image_file: imageRef.value[0].file!
+        }
+        await api.uploadWordImage(params)
       }
-      wordModel.wordImageSrc = params.word_image_name
+      wordModel.wordImageSrc = wordImageName
     }
   } catch (e) {
     console.log(e)
   }
-  await updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
+  await api.updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
 
   await updateBookPageData(route.params.bookId as string)
   resetWordsSelection()
@@ -114,6 +122,8 @@ async function onDelete() {
   wordModel.wordDbId = -1
   resetWordsSelection()
 }
+
+console.log('wordModel', wordModel)
 </script>
 
 <template>
@@ -128,6 +138,21 @@ async function onDelete() {
     >
       <n-form-item label="word">
         <n-text :strong="true">{{ wordModel.wordString }}</n-text>
+      </n-form-item>
+
+      <n-form-item label="image">
+        <n-flex align="center">
+          <n-upload
+            action="/api/word/upload_word_image"
+            v-model:file-list="imageRef"
+            list-type="image-card"
+            :max="1"
+          >
+          </n-upload>
+          <n-button icon-placement="left" :loading="loadingSearchImage" @click="onSearchImage"
+            >Search!</n-button
+          >
+        </n-flex>
       </n-form-item>
       <n-form-item label="Explanation" path="textareaValue">
         <n-input
@@ -161,15 +186,7 @@ async function onDelete() {
 
       <!--      </n-form-item>-->
     </n-form>
-    <n-upload
-      action="/api/word/upload_word_image"
-      v-model:file-list="imageRef"
-      list-type="image-card"
-      :max="1"
-    >
-    </n-upload>
     <!--    <n-button @click="uploadImageManually">save image</n-button>-->
-    <pre>{{ JSON.stringify(wordModel, null, 2) }}</pre>
   </template>
 </template>
 

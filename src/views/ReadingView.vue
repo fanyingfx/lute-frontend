@@ -9,9 +9,10 @@ import {
   Home
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
-import { bookPageData as pagedData, updateBookPageData } from '@/store'
-import { resetWordsSelection, wordSelectEnd } from '@/components/reading/wordsSelection'
+import { bookPageData as pagedData, updateBookPageData } from '@/store/BookDataStore'
+import { resetWordsSelection, wordSelectEnd } from '@/store/WordsSelectionStore'
 import { useRoute } from 'vue-router'
+import SearchImage from '@/components/reading/SearchImage.vue'
 
 const currentPage = ref(1)
 
@@ -118,7 +119,7 @@ provide('wordToken', currentWordToken)
         </template>
         <template #2>
           <n-h1>Dictionary Word Page</n-h1>
-          <span>Work In Process</span>
+          <SearchImage />
         </template>
       </n-split>
     </template>

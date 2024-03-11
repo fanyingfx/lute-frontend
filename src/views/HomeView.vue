@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import { getBooklist } from '@/api/apiRequests'
+import api from '@/api/apiRequests'
 
 interface Book {
   languageName: string
@@ -30,7 +30,7 @@ const columns = [
 const data = ref<Book[]>([])
 
 watchEffect(async () => {
-  const booklist = await getBooklist()
+  const booklist = await api.getBooklist()
   let i = 1
   data.value = booklist.map((bookItem) => {
     return {

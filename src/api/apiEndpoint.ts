@@ -9,7 +9,9 @@ export const Endpoint = {
     createOrUpdate: 'word/create_or_update',
     delete: 'word/delete',
     uploadWordImage: 'word/upload_word_image',
-    updateWordIndex: 'word/update_word_index'
+    updateWordIndex: 'word/update_word_index',
+    uploadWordImagev2: 'word/upload_word_imagev2',
+    searchImage: 'word/search_word_image'
   }
 }
 export const wordImagePrefixUrl = '/api/word_images'

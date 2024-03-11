@@ -1,10 +1,14 @@
 import type { WordToken } from '@/api/Interface'
+import { ref } from 'vue'
 
 interface TextSelection {
   start_id: string
   end_id: string
   last_id: string
 }
+
+export const wordsPerPage = ref(250)
+export const wordImages = ref<string[]>([])
 
 export const wordsSelection = reactive<TextSelection>({
   start_id: '',

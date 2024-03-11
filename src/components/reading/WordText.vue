@@ -8,7 +8,7 @@ import {
   wordList,
   wordsSelection,
   selectedWord
-} from '@/components/reading/wordsSelection'
+} from '@/store/WordsSelectionStore'
 
 let props = defineProps<{
   word: WordToken
@@ -106,6 +106,6 @@ span {
 }
 
 .word_text {
-  @apply whitespace-normal inline-block;
+  @apply whitespace-normal inline-block text-lg;
 }
 </style>
