@@ -8,8 +8,8 @@ defineProps<{
 </script>
 
 <template>
-  <n-el tag="div">
-    <template v-for="(item, index) in segments" :key="index">
+  <div>
+    <template v-for="item in segments" :key="item">
       <!-- @vue-ignore -->
       <TextParagraph v-if="item.segmentType === 'textparagraph'" :paragraph="item" />
       <n-image v-else-if="item.segmentType === 'image'" :alt="item.segmentValue"
@@ -21,7 +21,7 @@ defineProps<{
       </template>
       <pre v-else-if="item.segmentType === 'block'">{{ item.segmentValue }}</pre>
     </template>
-  </n-el>
+  </div>
 </template>
 
 <style scoped></style>

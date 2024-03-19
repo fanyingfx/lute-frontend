@@ -9,7 +9,7 @@ defineProps<{
 </script>
 <template>
   <n-p :id="'para' + paragraph.paragraphOrder" class="text-wrap">
-    <template v-for="(item, index) in paragraph.segmentWords" :key="index">
+    <template v-for="item in paragraph.segmentWords" :key="item">
       <SentenceItem :sentence-segment="item" />
     </template>
   </n-p>

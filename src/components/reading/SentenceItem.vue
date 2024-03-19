@@ -13,14 +13,10 @@ const sentenceId = computed(
 
 <template>
   <span class="sentence" :id="sentenceId">
-    <template v-for="(item, index) in sentenceSegment.segmentWords" :key="index">
+    <template v-for="(item, index) in sentenceSegment.segmentWords" :key="item">
       <WordItem :word="item" :word-id="sentenceId + '_' + index" />
     </template>
   </span>
 </template>
 
-<style scoped>
-span.sentence {
-  @apply border-r-2 border-r-amber-300;
-}
-</style>
+<style scoped></style>

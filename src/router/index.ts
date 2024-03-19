@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import ReadingView from '@/views/ReadingView.vue'
+import DictView from '@/views/DictView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +22,8 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/home'
-    }
+    },
+    { path: '/dict', name: 'dict', component: DictView }
   ]
 })
 

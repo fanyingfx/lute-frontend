@@ -86,7 +86,7 @@ function mouseMove() {
 </script>
 
 <template>
-  <n-text
+  <span
     class="word_text"
     :class="[wordStatusClass, { 'bg-yellow-400': isSelected }]"
     :id="wordId"
@@ -97,7 +97,7 @@ function mouseMove() {
       >{{ word.wordString
       }}<rt v-if="word.wordPronunciation != ''">{{ word.wordPronunciation }}</rt></ruby
     >{{ word.nextIsWs ? '&nbsp;' : '' }}
-  </n-text>
+  </span>
 </template>
 
 <style lang="postcss" scoped>

@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { currentLanguageId, updateBookPageData } from '@/store/BookDataStore'
-import KyService from '@/api/config'
+import { currentLanguageId } from '@/store/BookDataStore'
 import api from '@/api/apiRequests'
-import { Endpoint, wordImagePrefixUrl } from '@/api/apiEndpoint'
-import type { WordToken } from '@/api/Interface'
-import { resetWordsSelection, selectedWord, wordImages } from '@/store/WordsSelectionStore'
-import type { UploadFileInfo } from 'naive-ui'
+import { wordImagePrefixUrl } from '@/api/apiEndpoint'
+import {
+  resetWordsSelection,
+  selectedWord,
+  wordImages,
+  imageRef
+} from '@/store/WordsSelectionStore'
 
 import { useRoute } from 'vue-router'
 // let wordToken = <Ref<WordToken|null>>inject('wordToken')
 const formRef = ref<FormInst | null>(null)
-const imageRef = ref<UploadFileInfo[]>([])
+const props = defineProps({
+  updateBookData: Function
+})
 
 interface IWordModel {
   wordString: string
@@ -28,12 +32,7 @@ interface IWordModel {
   wordDbId: number
 }
 
-onMounted(() => {
-  console.log('WordForm onMounted ')
-})
-
 const route = useRoute()
-console.log('route', route.query)
 currentLanguageId.value = Number(route.query.languageId as string)
 const wordModel = reactive<IWordModel>({
   wordString: selectedWord.value?.wordString.trim() ?? '',
@@ -77,11 +76,9 @@ async function onSearchImage() {
 async function onFormSubmit() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { wordDbId: _, wordImageSrc: __, ...req } = wordModel
-    console.log('req', wordModel)
-    const wordToken = await KyService.post(Endpoint.word.createOrUpdate, {
-      json: req
-    }).json<WordToken>()
+    const { wordImageSrc: _, ...req } = wordModel
+    // console.log('req', wordModel)
+    const wordToken = await api.createOrUpdateWord(req)
     wordModel.wordDbId = wordToken.wordDbId
     if (imageRef.value.length > 0 && wordToken.wordDbId > 0) {
       // if image exists, update word_image
@@ -93,37 +90,30 @@ async function onFormSubmit() {
           save_local: true,
           word_image_name: wordImageName,
           word_id: wordToken.wordDbId!,
-          word_image_file: imageRef.value[0].file!
+          file: imageRef.value[0].file!
         }
         await api.uploadWordImage(params)
       }
       wordModel.wordImageSrc = wordImageName
     }
+    await api.updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
+    await props.updateBookData!()
+    resetWordsSelection()
   } catch (e) {
     console.log(e)
   }
-  await api.updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
-
-  await updateBookPageData(route.params.bookId as string)
-  resetWordsSelection()
 }
 
 async function onDelete() {
-  console.log(`delete Word ${wordModel.wordString}, dbId=${wordModel.wordDbId}`)
-  try {
-    const res = await KyService.delete(`${Endpoint.word.delete}/${wordModel.wordDbId}`)
-    console.log('res', res)
-  } catch (e) {
-    console.log(e)
-  }
-
-  await updateBookPageData(route.params.bookId as string)
+  await api.deleteWord(wordModel.wordDbId)
+  await api.updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
+  await props.updateBookData!()
   wordModel.wordStatus = 1
   wordModel.wordDbId = -1
   resetWordsSelection()
 }
 
-console.log('wordModel', wordModel)
+// console.log('wordModel', wordModel)
 </script>
 
 <template>
@@ -135,13 +125,14 @@ console.log('wordModel', wordModel)
       label-width="auto"
       require-mark-placement="right-hanging"
       class="word-form"
+      size="small"
     >
       <n-form-item label="word">
         <n-text :strong="true">{{ wordModel.wordString }}</n-text>
       </n-form-item>
 
       <n-form-item label="image">
-        <n-flex align="center">
+        <n-flex>
           <n-upload
             action="/api/word/upload_word_image"
             v-model:file-list="imageRef"
@@ -178,15 +169,11 @@ console.log('wordModel', wordModel)
           type="text"
         />
       </n-form-item>
-      <!--      <n-form-item >-->
       <div style="display: flex; justify-content: flex-end">
         <n-button v-if="wordModel.wordDbId > 0" @click="onDelete">Delete</n-button>
         <n-button @click="onFormSubmit">Save</n-button>
       </div>
-
-      <!--      </n-form-item>-->
     </n-form>
-    <!--    <n-button @click="uploadImageManually">save image</n-button>-->
   </template>
 </template>
 

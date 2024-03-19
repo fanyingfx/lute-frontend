@@ -8,6 +8,7 @@ interface Book {
   index: number
   languageId: number
   hasLink: boolean
+  currentPage?: number
 }
 
 const columns = [
@@ -16,7 +17,11 @@ const columns = [
     key: 'bookName',
     render(row: Book) {
       if (row.hasLink) {
-        const bookPath = { path: `/reading/${row.bookId}`, query: { languageId: row.languageId } }
+        const bookPath = {
+          name: 'reading',
+          params: { bookId: row.bookId },
+          query: { languageId: row.languageId, currentPage: row.currentPage }
+        }
         return <router-link to={bookPath}>{row.bookName}</router-link>
       }
       return <span>{row.bookName}</span>
@@ -47,7 +52,8 @@ watchEffect(async () => {
           bookId: bookText.id,
           languageId: bookItem.language.id,
           index: i++,
-          hasLink: true
+          hasLink: true,
+          currentPage: bookText.currentPage
         }
       })
     }

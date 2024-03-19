@@ -17,9 +17,20 @@ export const bookPageData = ref<TSegment[][]>([
   ]
 ])
 export const currentLanguageId = ref(1)
-
-export async function updateBookPageData(bookId: string = '1') {
-  const data = await api.getBooktext(bookId)
-  console.log('bookData', data)
-  bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
+export async function getBookPageData(bookId: string = '1') {
+  return bookDatapaginate(await api.getBooktext(bookId), wordsPerPage.value)
 }
+export async function getTestBookPageData(language: string = '1') {
+  return bookDatapaginate(await api.getBooktextTest(language), wordsPerPage.value)
+}
+// export async function updateBookPageData(bookId: string = '1') {
+//   let data = [] as ParsedTextSegment[]
+//   if(isNaN(Number(bookId))){
+//     // test data
+//     data= await api.getBooktextTest(bookId)
+//   }else{
+//      data = await api.getBooktext(bookId)
+//   }
+//   console.log('bookData', data)
+//   bookPageData.value = bookDatapaginate(data, wordsPerPage.value)
+// }

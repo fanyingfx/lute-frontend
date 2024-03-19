@@ -36,6 +36,7 @@ export interface TextParagraphSegment {
 interface BookText {
   title: string
   id: number
+  currentPage: number
 }
 
 export interface BookItem {

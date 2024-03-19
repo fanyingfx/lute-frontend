@@ -40,6 +40,7 @@ declare module 'vue' {
     SentenceItem: typeof import('./src/components/reading/SentenceItem.vue')['default']
     TextParagraph: typeof import('./src/components/reading/TextParagraph.vue')['default']
     WordForm: typeof import('./src/components/reading/WordForm.vue')['default']
+    WordFormTest: typeof import('./src/components/reading/WordFormTest.vue')['default']
     WordItem: typeof import('./src/components/reading/WordItem.vue')['default']
     WordText: typeof import('./src/components/reading/WordText.vue')['default']
   }

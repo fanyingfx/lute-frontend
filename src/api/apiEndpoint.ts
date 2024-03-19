@@ -3,14 +3,16 @@ export const Endpoint = {
   book: {
     onebook: 'book/one',
     allbook: 'book/list',
-    booktext: 'book/booktext'
+    booktext: 'book/booktext',
+    update_booktext_pagenum: 'book/booktext/update_page',
+    test_en: 'book/booktext/test_en',
+    test_jp: 'book/booktext/test_jp'
   },
   word: {
     createOrUpdate: 'word/create_or_update',
     delete: 'word/delete',
-    uploadWordImage: 'word/upload_word_image',
     updateWordIndex: 'word/update_word_index',
-    uploadWordImagev2: 'word/upload_word_imagev2',
+    uploadWordImage: 'word/upload_word_image',
     searchImage: 'word/search_word_image'
   }
 }

@@ -1,5 +1,6 @@
 import type { WordToken } from '@/api/Interface'
 import { ref } from 'vue'
+import type { UploadFileInfo } from 'naive-ui'
 
 interface TextSelection {
   start_id: string
@@ -10,6 +11,7 @@ interface TextSelection {
 export const wordsPerPage = ref(250)
 export const wordImages = ref<string[]>([])
 
+export const imageRef = ref<UploadFileInfo[]>([])
 export const wordsSelection = reactive<TextSelection>({
   start_id: '',
   end_id: '',

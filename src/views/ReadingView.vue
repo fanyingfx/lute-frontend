@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watchEffect } from 'vue'
 import { NButton, NText } from 'naive-ui'
-import type { WordToken } from '@/api/Interface'
+import api from '@/api/apiRequests'
 import TextReadingComponent from '@/components/reading/ReadingPage.vue'
 import {
   ChevronBackSharp as BackSharp,
@@ -9,46 +9,67 @@ import {
   Home
 } from '@vicons/ionicons5'
 import WordForm from '@/components/reading/WordForm.vue'
-import { bookPageData as pagedData, updateBookPageData } from '@/store/BookDataStore'
-import { resetWordsSelection, wordSelectEnd } from '@/store/WordsSelectionStore'
-import { useRoute } from 'vue-router'
+import { bookPageData as pagedData } from '@/store/BookDataStore'
+import { resetWordsSelection, wordSelectEnd, wordsPerPage } from '@/store/WordsSelectionStore'
+import { useRoute, useRouter } from 'vue-router'
 import SearchImage from '@/components/reading/SearchImage.vue'
+import DictView from '@/views/DictView.vue'
+import { bookDatapaginate } from '@/utils/TextUtils'
 
+// Data properties
 const currentPage = ref(1)
-
-const currentPageData = computed(() => {
-  return pagedData.value[currentPage.value - 1]
-})
 const readingPanelRef = ref(null)
-const totalPages = computed(() => Math.ceil(pagedData.value.length))
-onMounted(() => {
-  console.log('ReadingView onMounted ')
-})
-onUnmounted(() => {
-  console.log('ReadingView onUnMounted')
+const route = useRoute()
+const router = useRouter()
 
-  resetWordsSelection()
-})
-const nextPage = () => {
+// Computed properties
+const currentPageData = computed(() => pagedData.value[currentPage.value - 1])
+const totalPages = computed(() => Math.ceil(pagedData.value.length))
+
+// Methods
+const updatePage = async (page: number) => {
+  await api.updateBooktextPagenum(Number(route.params.bookId), page)
+  console.log('route.path', route.path, route.query, page)
+  await router.push({ path: route.path, query: { ...route.query, currentPage: page } })
+}
+
+const nextPage = async () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++
   }
-  console.log(currentPage.value, currentPageData.value)
+  await updatePage(currentPage.value)
 }
 
-const prevPage = () => {
+const prevPage = async () => {
   if (currentPage.value > 0) {
     currentPage.value--
   }
-  console.log(currentPage.value, currentPageData.value)
+  await updatePage(currentPage.value)
 }
-const route = useRoute()
-watchEffect(async () => {
-  await updateBookPageData(route.params.bookId as string)
+
+// Lifecycle hooks
+onMounted(() => {
+  console.log('ReadingView onMounted ')
 })
 
-const currentWordToken = ref<WordToken | null>(null)
-provide('wordToken', currentWordToken)
+onUnmounted(() => {
+  console.log('ReadingView onUnMounted')
+  resetWordsSelection()
+})
+async function getBookData() {
+  return await api.getBooktextTest(route.params.bookId as string)
+}
+async function updataBookData() {
+  const bookData = await getBookData()
+  pagedData.value = bookDatapaginate(bookData, wordsPerPage.value)
+}
+
+// Watchers and provides
+watchEffect(async () => {
+  // await updateBookPageData(route.params.bookId as string)
+  await updataBookData()
+  currentPage.value = route.query.currentPage ? Number(route.query.currentPage) : 1
+})
 </script>
 <template>
   <n-breadcrumb>
@@ -61,10 +82,10 @@ provide('wordToken', currentWordToken)
   </n-breadcrumb>
   <n-split
     direction="horizontal"
-    class="min-h-screen"
     @mouseup="wordSelectEnd"
     :max="0.75"
     :min="0.25"
+    class="reading-panel"
   >
     <template #1>
       <n-flex class="border border-sky-500" vertical id="left_pane" style="height: 100%">
@@ -109,25 +130,33 @@ provide('wordToken', currentWordToken)
       </n-flex>
     </template>
     <template #2>
-      <n-split direction="vertical" style="height: 100%">
+      <n-split direction="vertical" class="max-h-[100vh]">
         <template #1>
-          <n-scrollbar style="height: 100%">
-            <n-h1>DB Word Page</n-h1>
-            <WordForm />
+          <n-scrollbar class="max-h-[50vh]">
+            <WordForm :update-book-data="updataBookData" />
           </n-scrollbar>
-          <!--          <span>Work In Process</span>-->
         </template>
         <template #2>
-          <n-h1>Dictionary Word Page</n-h1>
-          <SearchImage />
+          <n-scrollbar class="max-h-[50vh]">
+            <n-tabs type="card">
+              <n-tab-pane name="dict" tab="Dict">
+                <DictView />
+              </n-tab-pane>
+              <n-tab-pane name="image" tab="Image">
+                <SearchImage />
+              </n-tab-pane>
+            </n-tabs>
+          </n-scrollbar>
         </template>
       </n-split>
     </template>
   </n-split>
-  <!--  </n-space>-->
 </template>
 <style scoped>
 .center_by_margin {
   margin-left: 10%;
+}
+.reading-panel {
+  min-height: 95vh;
 }
 </style>

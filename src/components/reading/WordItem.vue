@@ -15,14 +15,22 @@ defineProps<{
     <template #trigger>
       <WordText :word-id="wordId" :word="word" />
     </template>
-    <n-flex :id="`popcard_${wordId}`" size="small" vertical>
-      <n-text strong>{{ word.wordString }}</n-text>
-      <n-image v-if="word.wordImageSrc" :src="wordImagePrefixUrl + '/' + word.wordImageSrc" />
-      <n-text class="text-xs">{{ word.wordPronunciation }}</n-text>
-      <n-text>{{ word.wordExplanation }}</n-text>
+    <n-flex class="popcard" :id="`popcard_${wordId}`" size="small" vertical>
+      <strong>{{ word.wordString }}</strong>
+      <n-image
+        width="150"
+        v-if="word.wordImageSrc"
+        :src="wordImagePrefixUrl + '/' + word.wordImageSrc"
+      />
+      <span class="text-xs">{{ word.wordPronunciation }}</span>
+      <span class="whitespace-normal">{{ word.wordExplanation }}</span>
     </n-flex>
   </n-popover>
   <WordText :word-id="wordId" :word="word" v-else />
 </template>
 
-<style scoped></style>
+<style scoped lang="postcss">
+.popcard {
+  @apply max-w-[20rem];
+}
+</style>
