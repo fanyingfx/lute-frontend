@@ -28,8 +28,14 @@ const totalPages = computed(() => Math.ceil(pagedData.value.length))
 
 // Methods
 const updatePage = async (page: number) => {
-  await api.updateBooktextPagenum(Number(route.params.bookId), page)
-  console.log('route.path', route.path, route.query, page)
+  try {
+    await api.updateBooktextPagenum(Number(route.params.bookId), page)
+  } catch (error) {
+    console.error('updatePage error', error)
+  }
+
+  // await api.updateBooktextPagenum(Number(route.params.bookId), page)
+  // console.log('route.path', route.path, route.query, page)
   await router.push({ path: route.path, query: { ...route.query, currentPage: page } })
 }
 
@@ -56,12 +62,16 @@ onUnmounted(() => {
   console.log('ReadingView onUnMounted')
   resetWordsSelection()
 })
+
 async function getBookData() {
   return await api.getBooktextTest(route.params.bookId as string)
 }
+
 async function updataBookData() {
   const bookData = await getBookData()
+  console.log('get bookData', bookData)
   pagedData.value = bookDatapaginate(bookData, wordsPerPage.value)
+  console.log('pagedData', pagedData.value)
 }
 
 // Watchers and provides
@@ -156,6 +166,7 @@ watchEffect(async () => {
 .center_by_margin {
   margin-left: 10%;
 }
+
 .reading-panel {
   min-height: 95vh;
 }

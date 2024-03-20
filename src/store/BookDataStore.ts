@@ -18,7 +18,7 @@ export const bookPageData = ref<TSegment[][]>([
 ])
 export const currentLanguageId = ref(1)
 export async function getBookPageData(bookId: string = '1') {
-  return bookDatapaginate(await api.getBooktext(bookId), wordsPerPage.value)
+  return bookDatapaginate(await api.getBooktextById(bookId), wordsPerPage.value)
 }
 export async function getTestBookPageData(language: string = '1') {
   return bookDatapaginate(await api.getBooktextTest(language), wordsPerPage.value)

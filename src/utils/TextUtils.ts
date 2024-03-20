@@ -1,106 +1,117 @@
 import type { ParsedTextSegment, TextParagraphSegment, TSegment } from '@/api/Interface'
 
+
+/**
+ * This function combines sentences into paragraphs based on their paragraph order.
+ * It takes an array of ParsedTextSegment objects as input and returns an array of TSegment objects.
+ *
+ * @param {ParsedTextSegment[]} segments - The array of segments to be combined into paragraphs.
+ * @returns {TSegment[]} - The array of combined segments.
+ */
 function combineSentenceToParagraph(segments: ParsedTextSegment[]): TSegment[] {
   const segmentArray = [] as TSegment[]
-  let currParagraphOrder: number = 1
-  let textParagraphSegment = {
-    segmentType: 'textparagraph',
-    segmentRaw: '',
-    segmentWords: [] as ParsedTextSegment[],
-    paragraphOrder: 1
-  } as TextParagraphSegment
-  let i = 0
-  // TODO using Queue to rewrite the Code
-  while (i < segments.length) {
-    let segment = segments[i]
-    while (i < segments.length && segment.segmentType === 'sentence') {
-      if (segment.paragraphOrder !== currParagraphOrder) {
-        if (textParagraphSegment.segmentWords.length > 0) {
-          segmentArray.push(textParagraphSegment)
+  let preSegment = { paragraphOrder: -1 } as TextParagraphSegment
+  preSegment.segmentWords = [] as ParsedTextSegment[]
+  for (const segment of segments) {
+    if (segment.segmentType === 'sentence') {
+      if (preSegment.paragraphOrder !== segment.paragraphOrder) {
+        // new paragraph
+        if (preSegment.segmentWords.length > 0) {
+          segmentArray.push(preSegment)
         }
-        textParagraphSegment = {
+        preSegment = {
           segmentType: 'textparagraph',
+          segmentRaw: '',
           segmentWords: [] as ParsedTextSegment[],
           paragraphOrder: segment.paragraphOrder
         } as TextParagraphSegment
-        currParagraphOrder = segment.paragraphOrder
+        segmentArray.push(preSegment)
       }
-      textParagraphSegment.segmentWords.push(<ParsedTextSegment>segment)
-      i++
-      segment = segments[i]
+      if (preSegment.paragraphOrder === segment.paragraphOrder) {
+        preSegment.segmentWords.push(segment)
+        continue
+      }
     }
-    if (textParagraphSegment.segmentWords.length > 0) {
-      segmentArray.push(structuredClone(textParagraphSegment))
-    }
-    if (segment !== undefined) {
-      segmentArray.push(segment)
-    }
-    textParagraphSegment.segmentWords = []
-    i++
+    segmentArray.push(segment)
+    preSegment = {
+      segmentType: 'textparagraph',
+      segmentRaw: '',
+      segmentWords: [] as ParsedTextSegment[],
+      paragraphOrder: -1
+    } as TextParagraphSegment
+    // const newPageData = combineSentenceToParagraph(pageData)
+    // tempAllData.push(pageData)
+    // pageSegmentsCount = 0
+    // pageData = []
   }
   return segmentArray
 }
 
+/**
+ * This function paginates an array of ParsedTextSegment into pages based on the specified words per page.
+ * It returns paginated data as an array of arrays of TSegment.
+ *
+ * @param {ParsedTextSegment[]} bookData - The array of segments to be paginated.
+ * @param {number} wordsPerPage - The number of words per page.
+ * @returns {TSegment[][]} - The paginated data.
+ */
 export function bookDatapaginate(
   bookData: ParsedTextSegment[],
   wordsPerPage: number
 ): TSegment[][] {
-  /**
-   * @remarks
-   * This TypeScript function takes an array of ParsedTextSegment,
-   * and a number representing words per page,
-   *  and paginates the book data by breaking it down into pages based on the words per page.
-   * It uses a while loop to iterate through the book data, adding segments to each page
-   *  until the word limit is reached, and then combining the segments into paragraphs
-   * and pushing them into the result array.
-   * The function returns the paginated data as an array of arrays of TSegment.
-   */
-  function removeHeadEmptyLineBreaks() {
-    while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
-      pageData = pageData.splice(1)
-    }
-  }
 
   const tempAllData = [] as TSegment[][]
   let pageData = [] as ParsedTextSegment[]
-  let pageDataHasText = false
   let pageSegmentsCount = 0
-  let currentSegmentLength = 0
   let index = 0
 
   while (index < bookData.length) {
-    const segment = bookData[index]
-
-    if (segment.segmentType === 'sentence') {
-      currentSegmentLength = pageSegmentsCount + segment.segmentWords.length
-    }
-
-    if (currentSegmentLength < wordsPerPage || !pageDataHasText) {
-      pageData.push(segment)
+    // const segment = bookData[index]
+    // if the segment is a linebreak and the page is empty, skip it
+    if (bookData[index].segmentType.includes('linebreak') && pageData.length === 0) {
       index++
-      if (segment.segmentType === 'sentence') {
-        pageDataHasText = true
-      }
-      pageSegmentsCount = currentSegmentLength
-      // add sentence to pageData until the page token size is greater than wordsPerPage
       continue
     }
-    removeHeadEmptyLineBreaks()
-    // console.log('pagedata-before', pageData)
-    const newPageData = combineSentenceToParagraph(pageData)
-    // console.log('pagedata-after', pageData)
-    tempAllData.push(newPageData)
-    pageDataHasText = false
-    pageSegmentsCount = 0
-    currentSegmentLength = 0
-    pageData = []
-  }
-  while (pageData.length > 0 && pageData[0].segmentType.includes('linebreak')) {
-    pageData = pageData.splice(1)
+    if (
+      bookData[index].segmentType === 'sentence'
+    ) {
+      if(pageSegmentsCount + bookData[index].segmentWords.length <= wordsPerPage){
+        pageData.push(bookData[index])
+        pageSegmentsCount += bookData[index].segmentWords.length
+        index++
+        continue
+      }else {
+        tempAllData.push(pageData)
+        pageSegmentsCount = bookData[index].segmentWords.length
+        pageData = [bookData[index]]
+        continue
+      }
+    }
+    if (bookData[index].segmentType === 'pagestart') {
+      // const newPageData = combineSentenceToParagraph(pageData)
+      tempAllData.push(pageData)
+      pageSegmentsCount = 0
+      pageData = []
+      index++
+
+      while (bookData[index].segmentType !== 'pageend') {
+        pageData.push(bookData[index])
+        index++
+      }
+      //skip pageend
+      index++
+      tempAllData.push(pageData)
+      pageData = []
+      pageSegmentsCount = 0
+      continue
+    }
+    pageData.push(bookData[index])
+    index++
   }
   if (pageData.length > 0) {
-    tempAllData.push(combineSentenceToParagraph(pageData))
+    tempAllData.push(pageData)
   }
+  console.log('tempAllData', tempAllData)
 
-  return tempAllData
+  return tempAllData.map((data) => combineSentenceToParagraph(data as ParsedTextSegment[]))
 }

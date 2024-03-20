@@ -78,7 +78,7 @@ async function createOrUpdateWord(req: any) {
 
 export default {
   getBooklist,
-  getBooktext: getBooktextById,
+  getBooktextById,
   uploadWordImage,
   updateWordIndex,
   getWordImages,
