@@ -12,9 +12,7 @@ defineProps<{
     <template v-for="item in segments" :key="item">
       <!-- @vue-ignore -->
       <TextParagraph v-if="item.segmentType === 'textparagraph'" :paragraph="item" />
-      <n-image v-else-if="item.segmentType === 'image'" :alt="item.segmentValue"
-        >{{ item.segmentValue }}
-      </n-image>
+      <img v-else-if="item.segmentType === 'image'" alt="load failed" :src="item.segmentValue"/>
       <br v-else-if="item.segmentType === 'softlinebreak'" />
       <template v-else-if="item.segmentType === 'hardlinebreak'">
         <br style="display: block; content: ''; margin-top: 1.5rem" />

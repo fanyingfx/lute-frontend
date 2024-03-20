@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormInst } from 'naive-ui'
+import { type FormInst } from 'naive-ui'
 import { currentLanguageId } from '@/store/BookDataStore'
 import api from '@/api/apiRequests'
 import { wordImagePrefixUrl } from '@/api/apiEndpoint'
@@ -104,6 +104,8 @@ async function onFormSubmit() {
   }
 }
 
+const showModal = ref(false)
+// const message = useMessage()
 async function onDelete() {
   await api.deleteWord(wordModel.wordDbId)
   await api.updateWordIndex(wordModel.languageId, wordModel.wordTokens[0])
@@ -170,7 +172,17 @@ async function onDelete() {
         />
       </n-form-item>
       <div style="display: flex; justify-content: flex-end">
-        <n-button v-if="wordModel.wordDbId > 0" @click="onDelete">Delete</n-button>
+        <n-button v-if="wordModel.wordDbId > 0" @click="showModal=true">Delete</n-button>
+        <n-modal
+        v-model:show="showModal"
+        preset="dialog"
+        title="Delete Word"
+        content="Are you sure to delete this word?"
+        positive-text="Delete!"
+        negative-text="Cancel"
+        @positive-click="onDelete"
+        @negative-click="showModal=false"
+        />
         <n-button @click="onFormSubmit">Save</n-button>
       </div>
     </n-form>

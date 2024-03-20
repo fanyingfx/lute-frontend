@@ -25,6 +25,9 @@ const router = useRouter()
 // Computed properties
 const currentPageData = computed(() => pagedData.value[currentPage.value - 1])
 const totalPages = computed(() => Math.ceil(pagedData.value.length))
+// const dictURLPrefix = computed(() => dictObj[route.query.languageId[0] ]
+
+
 
 // Methods
 const updatePage = async (page: number) => {

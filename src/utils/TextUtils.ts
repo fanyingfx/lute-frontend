@@ -1,6 +1,5 @@
 import type { ParsedTextSegment, TextParagraphSegment, TSegment } from '@/api/Interface'
 
-
 /**
  * This function combines sentences into paragraphs based on their paragraph order.
  * It takes an array of ParsedTextSegment objects as input and returns an array of TSegment objects.
@@ -59,43 +58,45 @@ export function bookDatapaginate(
   bookData: ParsedTextSegment[],
   wordsPerPage: number
 ): TSegment[][] {
-
   const tempAllData = [] as TSegment[][]
   let pageData = [] as ParsedTextSegment[]
   let pageSegmentsCount = 0
   let index = 0
+  function currentSegment() {
+    return bookData[index]
+  }
+  function currentSegmentType(){
+    return bookData[index].segmentType
+  }
 
   while (index < bookData.length) {
     // const segment = bookData[index]
     // if the segment is a linebreak and the page is empty, skip it
-    if (bookData[index].segmentType.includes('linebreak') && pageData.length === 0) {
+    if (currentSegmentType().includes('linebreak') && pageData.length === 0) {
       index++
       continue
     }
-    if (
-      bookData[index].segmentType === 'sentence'
-    ) {
-      if(pageSegmentsCount + bookData[index].segmentWords.length <= wordsPerPage){
-        pageData.push(bookData[index])
-        pageSegmentsCount += bookData[index].segmentWords.length
-        index++
-        continue
-      }else {
+    if (currentSegmentType() === 'sentence') {
+      if (pageSegmentsCount + currentSegment().segmentWords.length <= wordsPerPage) {
+        pageData.push(currentSegment())
+        pageSegmentsCount += currentSegment().segmentWords.length
+      } else {
         tempAllData.push(pageData)
-        pageSegmentsCount = bookData[index].segmentWords.length
-        pageData = [bookData[index]]
-        continue
+        pageSegmentsCount = currentSegment().segmentWords.length
+        pageData = [currentSegment()]
       }
+      index++
+      continue
     }
-    if (bookData[index].segmentType === 'pagestart') {
+    if (currentSegmentType() === 'pagestart') {
       // const newPageData = combineSentenceToParagraph(pageData)
       tempAllData.push(pageData)
       pageSegmentsCount = 0
       pageData = []
       index++
 
-      while (bookData[index].segmentType !== 'pageend') {
-        pageData.push(bookData[index])
+      while (currentSegmentType() !== 'pageend') {
+        pageData.push(currentSegment())
         index++
       }
       //skip pageend
@@ -105,7 +106,7 @@ export function bookDatapaginate(
       pageSegmentsCount = 0
       continue
     }
-    pageData.push(bookData[index])
+    pageData.push(currentSegment())
     index++
   }
   if (pageData.length > 0) {
